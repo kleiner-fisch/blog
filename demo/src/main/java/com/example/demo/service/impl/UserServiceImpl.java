@@ -24,9 +24,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Long updateUser(User user) {
-        this.userRepository.save(user);
-        return user.getUserId();
+    public Long updateUser(Long userId, User user) {
+        User reference = this.userRepository.getReferenceById(userId);
+        reference.setMail(user.getMail());
+        reference.setPassword(user.getPassword());
+        reference.setUsername(user.getUsername());
+        this.userRepository.save(reference);
+        return reference.getUserId();
     }
 
     @Override

@@ -31,9 +31,9 @@ public class CloudAPIController {
         return this.userService.createUser(user);
     }
 
-    @PutMapping("users")
-    public Long updateUser(@RequestBody User user){
-        return this.userService.updateUser(user);
+    @PutMapping("users/{userId}")
+    public Long updateUser(@PathVariable("userId") Long userId, @RequestBody User user){
+        return this.userService.updateUser(userId, user);
     }
 
     @GetMapping("users/{userId}")

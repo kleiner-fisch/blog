@@ -47,6 +47,22 @@ components:
           type: string
         content:
           type: string  
+    user:
+      type: object 
+      required:
+        - user_id
+        - username
+        - mail
+        - password
+      properties:
+        user_id:
+          type: integer
+        username:
+          type: string
+        mail:
+          type: string
+        password:
+          type: string
   responses:
     400Error:
       description: Invalid request
@@ -133,6 +149,23 @@ paths:
           $ref: '#/components/responses/200Success'
         '400':
           $ref: '#/components/responses/400Error'
+    get:
+      description: Obtain a list of users
+      parameters:
+        - $ref: '#/components/parameters/page_limit'
+        - $ref: '#/components/parameters/page_offset'
+      responses:
+        '200':
+          description: Successfully retrieved the users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:                 
+                  $ref: '#/components/schemas/user'
+        '400':
+          $ref: '#/components/responses/400Error'
+
   /users/{user_id}:
     get:
       description: Obtain information about an user
@@ -144,14 +177,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user_id:
-                    type: integer
-                  username:
-                    type: string
-                  mail:
-                    type: string
+                $ref: '#/components/schemas/user'
         '400':
           $ref: '#/components/responses/400Error'
     put:
@@ -183,6 +209,13 @@ paths:
       responses:
         '200':
           description: Successfully deleted the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
         '400':
           $ref: '#/components/responses/400Error'
   /posts:

@@ -2,6 +2,8 @@ package com.example.demo.service.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -67,8 +69,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return this.userRepository.findAll();
-
+    public Page<User> getAllUsers(Pageable request) {
+        return this.userRepository.findAll(request);
     }
 }

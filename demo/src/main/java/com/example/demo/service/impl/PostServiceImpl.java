@@ -71,6 +71,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
     public Page<Post> getAllPosts(
             Optional<Integer> pageLimit,
             Optional<Integer> pageOffset,
@@ -85,6 +86,7 @@ public class PostServiceImpl implements PostService {
         return this.postRepository.findAll(pageRequest);
     }
 
+    @Override
     public Page<Post> getAllPosts() {
         return this.getAllPosts(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }

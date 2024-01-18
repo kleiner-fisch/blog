@@ -1,12 +1,8 @@
 package com.example.demo.controller;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +41,16 @@ public class PostController {
     public Post getPost(@PathVariable("postId") Long postId){
         return this.postService.getPost(postId);
     }
+
+
+    @GetMapping()
+    public Page<Post> home(@RequestParam Optional<Integer> pageLimit,
+            @RequestParam Optional<Integer> pageOffset,
+            @RequestParam Optional<String> sortBy,
+            @RequestParam Optional<String> sortOrder) {
+        return this.postService.getAllPosts(pageLimit, pageOffset, sortBy, sortOrder);
+    }
+
 
 
     @DeleteMapping("/{postId}")

@@ -22,8 +22,8 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
 @RestController
-@RequestMapping("/")
-public class CloudAPIController {
+@RequestMapping("/users")
+public class UserController {
 
     public static final Integer DEFAULT_PAGE_LIMIT = 10;
     public static final Integer DEFAULT_PAGE_OFFSET = 0;
@@ -33,26 +33,26 @@ public class CloudAPIController {
     //      We should fix the api.yaml names to use camel case.
     private UserService userService;
 
-    public CloudAPIController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("users")
+    @PostMapping()
     public Long createUser(@RequestBody User user){
         return this.userService.createUser(user);
     }
 
-    @PutMapping("users/{userId}")
+    @PutMapping("/{userId}")
     public Long updateUser(@PathVariable("userId") Long userId, @RequestBody User user){
         return this.userService.updateUser(userId, user);
     }
 
-    @GetMapping("users/{userId}")
+    @GetMapping("/{userId}")
     public User getUser(@PathVariable("userId") Long userId){
         return this.userService.getUser(userId);
     }
 
-    @GetMapping("users")
+    @GetMapping()
     public Page<User> getAllUsers(
             @RequestParam Optional<Integer> pageLimit, 
             @RequestParam Optional<Integer> pageOffset,
@@ -67,7 +67,7 @@ public class CloudAPIController {
         return this.userService.getAllUsers(pageRequest);
     }
 
-    @DeleteMapping("users/{userId}")
+    @DeleteMapping("/{userId}")
     public Long deleteUser(@PathVariable("userId") Long userId){
         return this.userService.deleteUser(userId);
     }

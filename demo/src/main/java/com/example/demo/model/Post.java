@@ -1,16 +1,34 @@
 package com.example.demo.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="Post_Table")
 public class Post {
-    private Long id;
+    @Column(name="postID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    private Long postId;
+    @Column(name="title")
     private String title;
+    @Column(name="content")
     private String content;
+    @ManyToOne
+    @JoinColumn(name = "userID")
     private User author;
-    private Date date;
+    @Column(name="date")
+    private LocalDateTime date;
 
-    public Post(Long id, String title, String content, User author, Date date) {
-        this.id = id;
+    public Post(Long id, String title, String content, User author, LocalDateTime date) {
+        this.postId = id;
         this.title = title;
         this.content = content;
         this.author = author;
@@ -19,11 +37,11 @@ public class Post {
     
     public Post() {}
 
-    public Long getId() {
-        return id;
+    public Long getPostId() {
+        return postId;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setPostId(Long id) {
+        this.postId = id;
     }
     public String getTitle() {
         return title;
@@ -43,10 +61,10 @@ public class Post {
     public void setAuthor(User author) {
         this.author = author;
     }
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

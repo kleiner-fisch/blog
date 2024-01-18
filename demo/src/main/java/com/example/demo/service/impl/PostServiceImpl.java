@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.PostNotFoundException;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostService;
@@ -45,7 +47,7 @@ public class PostServiceImpl implements PostService {
             return reference.getPostId();
         } catch (EntityNotFoundException e) {
             String msg = "Requested post not found. Given postID: " + postId;
-            throw new RuntimeException("not implemented");
+            throw new PostNotFoundException(msg);
         }
     }
 
@@ -56,7 +58,7 @@ public class PostServiceImpl implements PostService {
             return postId;
         } else {
             String msg = "Requested post not found. Given postID: " + postId;
-            throw new RuntimeException("not implemented");
+            throw new PostNotFoundException(msg);
         }
     }
 
@@ -66,8 +68,8 @@ public class PostServiceImpl implements PostService {
         if (post.isPresent()) {
             return post.get();
         } else {
-            String msg = "Requested user not found. Given userID: " + postId;
-            throw new RuntimeException("not implemented");
+            String msg = "Requested post not found. Given postID: " + postId;
+            throw new PostNotFoundException(msg);
         }
     }
 

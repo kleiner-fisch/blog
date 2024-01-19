@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.example.demo.Util;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -34,12 +35,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public Long updateUser(Long userId, User user) {
         try {
-            User reference = this.userRepository.getReferenceById(userId);
-            reference.setMail(user.getMail());
-            reference.setPassword(user.getPassword());
-            reference.setUsername(user.getUsername());
-            this.userRepository.save(reference);
-            return reference.getUserId();
+            User storedUser = this.userRepository.getReferenceById(userId);
+            Util.updateValue(storedUser::setMail, storedUser.getMail());
+            Util.updateValue(storedUser::setUsername, storedUser.getUsername());
+            Util.updateValue(storedUser::setPassword, storedUser.getPassword());
+            this.userRepository.save(storedUser);
+            return storedUser.getUserId();
         } catch (EntityNotFoundException e) {
             String msg = "Requested user not found. Given userID: " + userId;
             throw new UserNotFoundException(msg);

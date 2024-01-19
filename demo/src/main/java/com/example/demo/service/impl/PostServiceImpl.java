@@ -2,12 +2,14 @@ package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Util;
 import com.example.demo.exception.PostNotFoundException;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
@@ -37,18 +39,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public Long updatePost(Long postId, Post post) {
         try {
-            Post reference = this.postRepository.getReferenceById(postId);
-            reference.setAuthor(post.getAuthor());
-            reference.setContent(post.getContent());
-            reference.setDate(post.getDate());
-            reference.setTitle(post.getTitle());
-            this.postRepository.save(reference);
-            return reference.getPostId();
+            Post storedPost = this.postRepository.getReferenceById(postId);
+            Util.updateValue(storedPost::setAuthor, post.getAuthor());            
+            Util.updateValue(storedPost::setContent, post.getContent());
+            Util.updateValue(storedPost::setTitle, post.getTitle());
+            this.postRepository.save(storedPost);
+            return storedPost.getPostId();
         } catch (EntityNotFoundException e) {
             String msg = "Requested post not found. Given postID: " + postId;
             throw new PostNotFoundException(msg);
         }
     }
+
 
     // TODO we should delete also all comments of this post
     @Override

@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Util;
 import com.example.demo.exception.CommentNotFoundException;
 import com.example.demo.model.Comment;
 import com.example.demo.model.Post;
@@ -50,12 +51,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Long updateComment(Long commentId, Comment comment) {
         try {
-            Comment reference = this.commentRepository.getReferenceById(commentId);
-            reference.setAuthor(comment.getAuthor());
-            reference.setContent(comment.getContent());
-            reference.setDate(comment.getDate());
-            this.commentRepository.save(reference);
-            return reference.getCommentId();
+            Comment storedComment = this.commentRepository.getReferenceById(commentId);
+            Util.updateValue(storedComment::setAuthor, comment.getAuthor());            
+            Util.updateValue(storedComment::setContent, comment.getContent());
+            storedComment.setAuthor(comment.getAuthor());
+            storedComment.setContent(comment.getContent());
+            this.commentRepository.save(storedComment);
+            return storedComment.getCommentId();
         } catch (EntityNotFoundException e) {
             String msg = "Requested comment not found. Given commentID: " + commentId;
             throw new CommentNotFoundException(msg);

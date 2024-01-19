@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -105,4 +106,15 @@ public class CommentServiceImpl implements CommentService {
     public Page<Comment> getAllComments() {
         return this.getAllComments(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
+
+    @Override
+    public void addAllComments(List<Comment> comments) {
+        this.commentRepository.saveAll(comments);
+    }
+
+    @Override
+    public void deleteAllComments(){
+        this.commentRepository.deleteAll();
+    }
 }
+

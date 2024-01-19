@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="User_Table")
 public class User {
-    @Column(name="username")
+    @Column(name="username", unique = true)
     private String username;
     @Column(name="password")
     @JsonIgnore
@@ -27,7 +28,7 @@ public class User {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Post> posts;
 

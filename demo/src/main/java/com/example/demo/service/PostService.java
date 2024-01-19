@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -16,4 +17,9 @@ public interface PostService {
     public Page<Post> getAllPosts(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortBy,
             Optional<String> sortOrder);
 
+    public void addAllPosts(List<Post> posts);
+
+    public void deleteAllPosts();
+
+    public void flush();
 }

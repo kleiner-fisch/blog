@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -16,4 +17,8 @@ public interface CommentService {
     public Page<Comment> getAllComments(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortBy,
             Optional<String> sortOrder);
 
+    public void addAllComments(List<Comment> posts);
+
+    public void deleteAllComments();
+        
 }

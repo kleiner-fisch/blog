@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,19 @@ public class PostServiceImpl implements PostService {
         this.postRepository.save(post);
         return post.getPostId();
     }
+/*
+    TODO:
+
+        I GET THE FOLLOWING Exception:
+
+        java.time.format.DateTimeParseException: Text 'http://techcrunch.com/2010/03/23/yahoo-top-ad-malware-distributo...' could not be parsed at index 0
+        at java.base/java.time.format.DateTimeFormatter.parseResolved0(Unknown Source) ~[na:na]
+        at java.base/java.time.format.DateTimeFormatter.parse(Unknown Source) ~[na:na]
+        at java.base/java.time.LocalDateTime.parse(Unknown Source) ~[na:na]
+        at java.base/java.time.LocalDateTime.parse(Unknown Source) ~[na:na]
+
+*/
+
 
     @Override
     public Long updatePost(Long postId, Post post) {
@@ -91,5 +105,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> getAllPosts() {
         return this.getAllPosts(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    }
+
+    @Override
+    public void addAllPosts(List<Post> users) {
+        this.postRepository.saveAll(users);
+    }
+
+    @Override
+    public void deleteAllPosts(){
+        this.postRepository.deleteAll();
+    }
+
+    @Override
+    public void flush(){
+        this.postRepository.flush();
     }
 }

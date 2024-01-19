@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -23,8 +24,7 @@ public class UserServiceImpl implements UserService{
     public static final Integer DEFAULT_PAGE_OFFSET = 0;
 
     private UserRepository userRepository;
-    private static Long DELETED_USER_ID = 1L;
-    private static User DELETED_USER = new User(DELETED_USER_ID, "deleted user", "pw", "deleted", Collections.emptyList());
+
 
     public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -58,10 +58,11 @@ public class UserServiceImpl implements UserService{
     public Long deleteUser(Long userId) {
         if(this.userRepository.existsById(userId)){
             User toDelete = this.userRepository.getReferenceById(userId);
+            User deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER);
             var iterator = toDelete.getPosts().iterator();
             while(iterator.hasNext()){
                 Post post = iterator.next();
-                post.setAuthor(DELETED_USER);
+                post.setAuthor(deletedUser);
                 iterator.remove();
             }
             this.userRepository.delete(toDelete);
@@ -71,6 +72,8 @@ public class UserServiceImpl implements UserService{
             throw new UserNotFoundException(msg);
         }
     }
+
+    
 
     @Override
     public User getUser(Long userId) {
@@ -91,7 +94,7 @@ public class UserServiceImpl implements UserService{
             Optional<String> sortOrder) {
         Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
         Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-        String sortColumn = sortBy.orElseGet(() -> "postId");
+        String sortColumn = sortBy.orElseGet(() -> "userId");
         String sortDirection = sortOrder.orElseGet(() -> "asc");
         var pageRequest = PageRequest.of(offset, limit,
                 Direction.fromString(sortDirection), sortColumn);
@@ -102,4 +105,20 @@ public class UserServiceImpl implements UserService{
     public Page<User> getAllUsers() {
         return this.getAllUsers(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
+
+
+    @Override
+    public void addAllUsers(List<User> users) {
+        this.userRepository.saveAll(users);
+    }
+    
+    @Override
+    public void deleteAllUsers(){
+        this.userRepository.deleteAll();
+    }
+    @Override
+    public void flush(){
+        this.userRepository.flush();
+    }
+
 }

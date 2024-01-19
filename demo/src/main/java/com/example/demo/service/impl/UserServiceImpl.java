@@ -1,8 +1,11 @@
 package com.example.demo.service.impl;
 
 import java.util.Collections;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import com.example.demo.Util;
 import com.example.demo.exception.UserNotFoundException;
@@ -15,6 +18,9 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService{
+
+    public static final Integer DEFAULT_PAGE_LIMIT = 10;
+    public static final Integer DEFAULT_PAGE_OFFSET = 0;
 
     private UserRepository userRepository;
     private static Long DELETED_USER_ID = 1L;
@@ -78,7 +84,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<User> getAllUsers(Pageable request) {
-        return this.userRepository.findAll(request);
+    public Page<User> getAllUsers(
+            Optional<Integer> pageLimit,
+            Optional<Integer> pageOffset,
+            Optional<String> sortBy,
+            Optional<String> sortOrder) {
+        Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
+        Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
+        String sortColumn = sortBy.orElseGet(() -> "postId");
+        String sortDirection = sortOrder.orElseGet(() -> "asc");
+        var pageRequest = PageRequest.of(offset, limit,
+                Direction.fromString(sortDirection), sortColumn);
+        return this.userRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Page<User> getAllUsers() {
+        return this.getAllUsers(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 }

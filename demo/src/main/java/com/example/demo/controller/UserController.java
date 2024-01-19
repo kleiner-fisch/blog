@@ -55,13 +55,7 @@ public class UserController {
             @RequestParam Optional<Integer> pageOffset,
             @RequestParam Optional<String> sortBy,
             @RequestParam Optional<String> sortOrder){
-        Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
-        Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-        String sortColumn = sortBy.orElseGet(() -> "userId");
-        String sortDirection = sortOrder.orElseGet(() -> "asc");
-        var pageRequest = PageRequest.of(offset, limit, 
-            Direction.fromString(sortDirection), sortColumn);
-        return this.userService.getAllUsers(pageRequest);
+        return this.userService.getAllUsers(pageLimit, pageOffset, sortBy, sortOrder);
     }
 
     @DeleteMapping("/{userId}")

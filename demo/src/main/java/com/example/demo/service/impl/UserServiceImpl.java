@@ -46,6 +46,8 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    // TODO we should somehow indicate in the posts of this user that the author is deleted.
+    //      Perhaps replace the author field of the post with "deleted user"?
     @Override
     public Long deleteUser(Long userId) {
         if(this.userRepository.existsById(userId)){

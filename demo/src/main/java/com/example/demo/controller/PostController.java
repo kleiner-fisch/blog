@@ -44,7 +44,7 @@ public class PostController {
 
 
     @GetMapping()
-    public Page<Post> home(@RequestParam Optional<Integer> pageLimit,
+    public Page<Post> getAllPosts(@RequestParam Optional<Integer> pageLimit,
             @RequestParam Optional<Integer> pageOffset,
             @RequestParam Optional<String> sortBy,
             @RequestParam Optional<String> sortOrder) {

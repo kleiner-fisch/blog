@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import com.example.demo.model.Post;
 
 public interface PostService {
-    public Long createPost(Post user);
+    public Long createPost(Post post);
     public Long updatePost(Long postId, Post post);
     public Long deletePost(Long postId);
     public Post getPost(Long postId);

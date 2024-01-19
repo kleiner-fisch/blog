@@ -1,42 +1,68 @@
 package com.example.demo.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Comment_table")
 public class Comment {
     /**
      * Not only registered users, but anybody can comment. 
      * Hence, comment author is a simple string
      **/
+    @Column(name="author")
     private String author;
 
-    private Long commentID;
+    @Column(name="commentID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    private Long commentId;
+
+    @Column(name="content")
     private String content;
 
-    private Date date;
+    @Column(name="date")
+    private LocalDateTime date;
+
+    @ManyToOne
+    @JoinColumn(name = "postID", referencedColumnName = "postID")
+    private Post post;
 
     public Comment() {}
 
-    public Comment(String author, Long commentID, String content, Date date) {
+    public Comment(String author, Long commentId, String content, LocalDateTime date, Post post) {
         this.author = author;
-        this.commentID = commentID;
+        this.commentId = commentId;
         this.content = content;
         this.date = date;
+        this.post = post;
     }
+
 
     public String getAuthor() {
         return author;
     }
 
+
     public void setAuthor(String author) {
         this.author = author;
     }
 
-    public Long getCommentID() {
-        return commentID;
+    public Long getCommentId() {
+        return commentId;
     }
 
-    public void setCommentID(Long commentID) {
-        this.commentID = commentID;
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
     }
 
     public String getContent() {
@@ -47,11 +73,19 @@ public class Comment {
         this.content = content;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

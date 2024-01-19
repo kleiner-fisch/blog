@@ -1,18 +1,24 @@
 package com.example.demo.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="User_table")
+@Table(name="User_Table")
 public class User {
     @Column(name="username")
     private String username;
     @Column(name="password")
+    @JsonIgnore
     private String password;
     @Column(name="mail")
     private String mail;
@@ -21,13 +27,26 @@ public class User {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
+    @OneToMany(mappedBy = "author")
+    @JsonIgnore
+    private List<Post> posts;
+
     public User() {   }
     
-    public User(Long userId, String username, String password, String mail) {
+    public User(Long userId, String username, String password, String mail, List<Post> posts) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.mail = mail;
+        this.posts = posts;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public String getUsername() {
@@ -56,5 +75,13 @@ public class User {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+
+    @Override
+    public String toString(){
+        String result = "userID: " + this.userId + " , username: " + this.username +
+               ", mail: " + this.mail;
+        return result;
     }
 }

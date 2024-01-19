@@ -3,8 +3,11 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +35,7 @@ public class Post {
     @Column(name="date")
     private LocalDateTime date;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Comment> comments;
 

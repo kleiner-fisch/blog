@@ -1,8 +1,31 @@
 # blog
 A small web blog to learn about Java backend development.
 
-Supports creating, updating and removing user accounts. Additionally, users can create and remove posts and everybody can comment on posts.
+Supports creating, updating and removing user accounts. Additionally, users can create and remove posts and everybody can comment on posts. The data is stored in a database. 
 
-The data is stored in a database. To have some data we downloaded a public [1] data store of posts and added it to our database.
+To show how the blog works with a lot of data we the option to add blog data from a public data store (see below).
 
-[1] https://www.kaggle.com/datasets/lakritidis/identifying-influential-bloggers-techcrunch
+## Loading Example data store
+To fill the blog with a sizable number of blog entries you can do the following:
+
+1. Download the [data store](https://www.kaggle.com/datasets/lakritidis/identifying-influential-bloggers-techcrunch)
+1. Extract the archive to `DATA_STORE_PATH`
+1. Set the following four enviromental variables: 
+      ```
+      {
+        "dataStorePostsPath" : "<DATA_STORE_PATH>/posts.csv",
+        "dataStoreCommentsPath" : "<DATA_STORE_PATH>/comments.csv",
+        "dataStoreUsersPath" : "<DATA_STORE_PATH>/authors.csv" ,
+        "replaceBlogData" : true
+      }
+      ```
+1. Start the server.
+
+## TODO
+- How does this work with non-existing DB?
+- how to run & vcopile
+- dependecies?
+- Write proper documentation
+- Ensure this works on other computers 
+  - initializing previously not existing DB
+- API documentation using Swagger?

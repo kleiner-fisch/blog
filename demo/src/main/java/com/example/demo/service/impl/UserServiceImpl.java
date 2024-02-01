@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService{
             while(iterator.hasNext()){
                 Post post = iterator.next();
                 post.setAuthor(deletedUser);
+                deletedUser.getPosts().add(post);
                 iterator.remove();
             }
             this.userRepository.delete(toDelete);

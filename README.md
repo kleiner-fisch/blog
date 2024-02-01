@@ -22,10 +22,13 @@ To fill the blog with a sizable number of blog entries you can do the following:
 1. Start the server.
 
 ## TODO
-- How does this work with non-existing DB?
 - how to run & vcopile
 - dependecies?
 - Write proper documentation
 - Ensure this works on other computers 
   - initializing previously not existing DB
 - API documentation using Swagger?
+- Currently we have passwords.. Should have authentification
+- Tests
+- add method to get all posts/comments for username/name
+  - helps to have more significant tests for repository

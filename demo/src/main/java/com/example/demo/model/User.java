@@ -78,6 +78,20 @@ public class User {
         this.userId = userId;
     }
 
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof User){
+            User otherUser = (User) other;
+            boolean result = otherUser.getMail().equals(getMail());
+            result = result && otherUser.getPassword().equals(getPassword());
+            result = result && otherUser.getUsername().equals(getUsername());
+            result = result && otherUser.getUserId().equals(getUserId());
+            return result;
+        }else{
+            return false;
+        }
+
+    }
 
     @Override
     public String toString(){

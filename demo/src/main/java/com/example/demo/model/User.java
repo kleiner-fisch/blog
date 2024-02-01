@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,7 +20,8 @@ public class User {
     @Column(name="username", unique = true)
     private String username;
     @Column(name="password")
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @Column(name="mail")
     private String mail;

@@ -58,22 +58,28 @@ public class UserServiceImpl implements UserService{
     public Long deleteUser(Long userId) {
         if(this.userRepository.existsById(userId)){
             User toDelete = this.userRepository.getReferenceById(userId);
-            User deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER);
-            var iterator = toDelete.getPosts().iterator();
-            while(iterator.hasNext()){
-                Post post = iterator.next();
-                post.setAuthor(deletedUser);
-                deletedUser.getPosts().add(post);
-                iterator.remove();
+            if(!toDelete.getUsername().equals(UserService.DELETED_USER)){
+                User deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER);
+                var iterator = toDelete.getPosts().iterator();
+                while(iterator.hasNext()){
+                    Post post = iterator.next();
+                    post.setAuthor(deletedUser);
+                    deletedUser.getPosts().add(post);
+                    iterator.remove();
+                }
+                this.userRepository.delete(toDelete);
+                return userId;
             }
-            this.userRepository.delete(toDelete);
-            return userId;
-        }else{
-            String msg = "Requested user not found. Given userID: " + userId;
-            throw new UserNotFoundException(msg);
         }
+        String msg = "Requested user not found. Given userID: " + userId;
+        throw new UserNotFoundException(msg);
     }
 
+    @Override
+    public boolean userExists(String username){
+        var user = Optional.ofNullable(this.userRepository.findByUsername(username));
+        return user.isPresent();
+    }
     
 
     @Override

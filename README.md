@@ -16,7 +16,7 @@ To fill the blog with a sizable number of blog entries you can do the following:
         "dataStorePostsPath" : "<DATA_STORE_PATH>/posts.csv",
         "dataStoreCommentsPath" : "<DATA_STORE_PATH>/comments.csv",
         "dataStoreUsersPath" : "<DATA_STORE_PATH>/authors.csv" ,
-        "replaceBlogData" : true
+        "seedBlogData" : true
       }
       ```
 1. Start the server.
@@ -32,3 +32,4 @@ To fill the blog with a sizable number of blog entries you can do the following:
 - Tests
 - add method to get all posts/comments for username/name
   - helps to have more significant tests for repository
+- Add proper links in responses to allow discovery of the API by responses

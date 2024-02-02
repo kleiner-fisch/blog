@@ -3,18 +3,13 @@ package com.example.demo.config;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +19,7 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +30,7 @@ import com.example.demo.service.CommentService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 
+@DependsOnDatabaseInitialization
 @Component
 public class SeedData implements CommandLineRunner {
 
@@ -46,7 +43,7 @@ public class SeedData implements CommandLineRunner {
     private  String postsFilePath ;
     private  String commentsFilePath ;
 
-    private Boolean replaceBlogData;
+    private Boolean seedBlogData;
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -56,9 +53,9 @@ public class SeedData implements CommandLineRunner {
         this.commentService = commentService;
 
         Optional<Boolean> tmp  = Optional.ofNullable(env.getProperty("replaceBlogData", Boolean.class));
-        this.replaceBlogData = tmp.orElse(Boolean.FALSE);
-        if(replaceBlogData){
-            logger.info("replaceBlogData setto true. Replacing blog data.");
+        this.seedBlogData = tmp.orElse(Boolean.FALSE);
+        if(seedBlogData){
+            logger.info("seedBlogData setto true. Filling DB prepared blog data.");
             this.postsFilePath = env.getRequiredProperty("dataStorePostsPath");
             this.commentsFilePath = env.getRequiredProperty("dataStoreCommentsPath");
             this.usersFilePath  = env.getRequiredProperty("dataStoreUsersPath");
@@ -71,16 +68,10 @@ public class SeedData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if ( !this.replaceBlogData ){
+        if ( !this.seedBlogData ){
             return;
         }
 
-        logger.info("Emptying database");
-        commentService.deleteAllComments();;
-        postService.deleteAllPosts();
-        userService.deleteAllUsers();
-        
-        logger.info("Database empty. Importing example data store");
         Parser parser = new Parser();
 
         File usersFile = new File(usersFilePath);
@@ -97,22 +88,14 @@ public class SeedData implements CommandLineRunner {
         parser.parseCSVFile(commentsFile, (String line) -> parser.parseComment(line));
         logger.info("parsed comments.");
 
-        addDeleteUser();
         logger.info("storing data to database.");
+        // The posts and comments are added to the DB via cascading
         userService.addAllUsers(new ArrayList<>(parser.userMap.values()));
         userService.flush();
         logger.info("Done.");
     }
 
-    private void addDeleteUser() {
-        User deleteUser = new User();
-        deleteUser.setMail("deleted");
-        deleteUser.setPassword("pw");
-        deleteUser.setPosts(Collections.emptyList());
-        deleteUser.setUsername(UserService.DELETED_USER);
-        userService.createUser(deleteUser);
 
-    }
 
     class Parser {        
         

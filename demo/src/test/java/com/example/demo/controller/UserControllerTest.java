@@ -113,13 +113,22 @@ public class UserControllerTest {
 
     @Test
     void testCreateUser() throws Exception{
-
         when(userService.createUser(user1)).thenReturn(user1.getUserId());
         this.mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonify(user1)))
             .andDo(print()).andExpect(status().isOk());
     }
+
+    @Test
+    void testUpdateUser() throws Exception{
+        when(userService.updateUser(1L, user1)).thenReturn(1L);
+        this.mockMvc.perform(put("/users/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonify(user1)))
+            .andDo(print()).andExpect(status().isOk());
+    }
+
 
     /**
      * Custom serializer that does serialize the user password.

@@ -81,20 +81,20 @@ public class UserControllerTest {
     @Test
     void testGetUser() throws Exception{
         when(userService.getUser(anyLong())).thenReturn(user1);
-        this.mockMvc.perform(get("/users/1")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/users/1")).andExpect(status().isOk());
     }
 
     @Test
     void testGetAllUsers() throws Exception {
         Page<User> page = new PageImpl(users);
         when(userService.getAllUsers()).thenReturn(page);
-        this.mockMvc.perform(get("/users")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/users")).andExpect(status().isOk());
     }
 
     @Test
     void testDeleteUser() throws Exception{
         when(userService.deleteUser(1L)).thenReturn(1L);
-        this.mockMvc.perform(delete("/users/1")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(delete("/users/1")).andExpect(status().isOk());
     }
 
     /**
@@ -117,7 +117,7 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonify(user1)))
-            .andDo(print()).andExpect(status().isOk());
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class UserControllerTest {
         this.mockMvc.perform(put("/users/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonify(user1)))
-            .andDo(print()).andExpect(status().isOk());
+            .andExpect(status().isOk());
     }
 
 

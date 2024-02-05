@@ -14,6 +14,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 class SqliteConfig {
     @Autowired Environment env;
 
+    // TODO move to config package?
+    // TODO should be renamed to SqlliteConfig.java
 @Bean
 public DataSource dataSource() {
     final DriverManagerDataSource dataSource = new DriverManagerDataSource();

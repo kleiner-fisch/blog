@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -44,17 +46,20 @@ public class UserController {
         return this.userService.updateUser(userId, user);
     }
 
+    
     @GetMapping("/{userId}")
     public User getUser(@PathVariable("userId") Long userId){
         return this.userService.getUser(userId);
     }
 
+    // TODO the default value does not seem interpreted by openapi correctly...
+    @Operation(description = "Returns a page of all users.")
     @GetMapping()
     public Page<User> getAllUsers(
-            @RequestParam Optional<Integer> pageLimit, 
-            @RequestParam Optional<Integer> pageOffset,
-            @RequestParam Optional<String> sortBy,
-            @RequestParam Optional<String> sortOrder){
+            @RequestParam(defaultValue = "10") Optional<Integer> pageLimit, 
+            @RequestParam(defaultValue = "0") Optional<Integer> pageOffset,
+            @RequestParam(defaultValue = "userId") Optional<String> sortBy,
+            @RequestParam(defaultValue = "asc") Optional<String> sortOrder){
         return this.userService.getAllUsers(pageLimit, pageOffset, sortBy, sortOrder);
     }
 

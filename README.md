@@ -22,6 +22,9 @@ To fill the blog with a sizable number of blog entries you can do the following:
 1. Start the server.
 
 ## TODO
+- Currently the database is not correctly created, when there is no database. Hence, currently an empty database is part of the repository.
+
+
 - how to run & vcopile
 - dependecies?
 - Write proper documentation

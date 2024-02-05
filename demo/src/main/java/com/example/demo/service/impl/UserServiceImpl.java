@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService{
     }
 
 
+    // TODO does not check whether username already exists and exposes internal error to client
     @Override
     public Long createUser(User user) {
         this.userRepository.save(user);

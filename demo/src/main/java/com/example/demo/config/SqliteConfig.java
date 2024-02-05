@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import java.nio.file.Path;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,11 @@ class SqliteConfig {
     @Bean
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        Path dbPath = Path.of(env.getProperty("absoluteDBPath"));
         dataSource.setDriverClassName(env.getProperty("driverClassName"));
-        dataSource.setUrl(env.getProperty("url"));
+        System.out.println(dbPath.toAbsolutePath());
+        dataSource.setUrl("jdbc:sqlite:/" + dbPath.toAbsolutePath());
+
         dataSource.setUsername(env.getProperty("user"));
         dataSource.setPassword(env.getProperty("password"));
         return dataSource;

@@ -35,7 +35,7 @@ public class Post {
     @Column(name="date")
     private LocalDateTime date;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Comment> comments;
 

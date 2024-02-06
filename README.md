@@ -41,7 +41,7 @@ To fill the blog with a sizable number (~100 authors, ~20000 posts, ~750000 comm
 
 1. Download the [data store](https://www.kaggle.com/datasets/lakritidis/identifying-influential-bloggers-techcrunch)
 1. Extract the archive to `DATA_STORE_PATH`
-1. Set the following four enviromental variables: 
+1. Set the following four enviromental variables (additionally to the variables to run the application): 
       ```
       {
         "dataStorePostsPath" : "<DATA_STORE_PATH>/posts.csv",

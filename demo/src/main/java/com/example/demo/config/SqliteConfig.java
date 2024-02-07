@@ -22,7 +22,6 @@ class SqliteConfig {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         Path dbPath = Path.of(env.getProperty("absoluteDBPath"));
         dataSource.setDriverClassName(env.getProperty("driverClassName"));
-        System.out.println(dbPath.toAbsolutePath());
         dataSource.setUrl("jdbc:sqlite:/" + dbPath.toAbsolutePath());
 
         dataSource.setUsername(env.getProperty("user"));

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +20,13 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserController {
 
     public static final Integer DEFAULT_PAGE_LIMIT = 10;
@@ -37,12 +42,12 @@ public class UserController {
     }
 
     @PostMapping()
-    public Long createUser(@RequestBody User user){
+    public Long createUser(@Valid @RequestBody User user){
         return this.userService.createUser(user);
     }
 
     @PutMapping("/{userId}")
-    public Long updateUser(@PathVariable("userId") Long userId, @RequestBody User user){
+    public Long updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody User user){
         return this.userService.updateUser(userId, user);
     }
 
@@ -56,11 +61,12 @@ public class UserController {
     @Operation(description = "Returns a page of all users.")
     @GetMapping()
     public Page<User> getAllUsers(
-            @RequestParam(defaultValue = "10") Optional<Integer> pageLimit, 
-            @RequestParam(defaultValue = "0") Optional<Integer> pageOffset,
-            @RequestParam(defaultValue = "userId") Optional<String> sortBy,
-            @RequestParam(defaultValue = "asc") Optional<String> sortOrder){
-        return this.userService.getAllUsers(pageLimit, pageOffset, sortBy, sortOrder);
+            @RequestParam(name = "pageLimit", defaultValue = "10", required = false) @PositiveOrZero() Integer pageLimit, 
+             @RequestParam(name = "pageOffset", defaultValue = "0", required = false) @PositiveOrZero Integer pageOffset,
+             @RequestParam(name = "sortBy", defaultValue = "userid", required = false)  @Pattern(regexp = "userid|username|mail|") String sortBy,
+           @RequestParam(name = "sortOrder", defaultValue = "asc", required = false)  @Pattern(regexp = "asc|desc")  String sortOrder){
+        return this.userService.getAllUsers(Optional.ofNullable(pageLimit), 
+                    Optional.ofNullable(pageOffset), Optional.ofNullable(sortBy), Optional.ofNullable(sortOrder));
     }
 
     @DeleteMapping("/{userId}")

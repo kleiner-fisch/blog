@@ -13,17 +13,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="User_Table")
 public class User {
     @Column(name="username", unique = true)
     private String username;
-    @Column(name="password")
-    //@JsonIgnore
+    @NotBlank(message = "password must not be empty")
+    @Column(name="password", nullable = false)
     @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @Column(name="mail")
+    @Email()
     private String mail;
     @Id
     @Column(name="userID")

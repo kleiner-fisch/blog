@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class BlogExceptionHandler {
     
@@ -24,5 +27,11 @@ public class BlogExceptionHandler {
     public ResponseEntity<Object> handlePostNotFoundException(PostNotFoundException e){
         BlogException newException = new BlogException(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(newException, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<Object> handlePostNotFoundException(ConstraintViolationException e){
+        BlogException newException = new BlogException(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(newException, HttpStatus.BAD_REQUEST);
     }
 }

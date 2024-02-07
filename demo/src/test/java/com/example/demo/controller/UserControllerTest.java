@@ -51,6 +51,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import net.bytebuddy.build.EntryPoint.Unvalidated;
+
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
@@ -66,8 +68,8 @@ public class UserControllerTest {
 
     @BeforeEach
     private void setUp() {
-        user1 = new User(1L, "user1", "abc", "mail", Collections.emptyList());
-        user1 = new User(2L, "user2", "abc", "mail", Collections.emptyList());
+        user1 = new User(1L, "user1", "abc", "mail@comp.org", Collections.emptyList());
+        user1 = new User(2L, "user2", "abc", "mail@com.org", Collections.emptyList());
         users.add(user1);
         users.add(user2);
 
@@ -85,10 +87,33 @@ public class UserControllerTest {
     }
 
     @Test
-    void testGetAllUsers() throws Exception {
+    void testGetAllUsers_ok1() throws Exception {
         Page<User> page = new PageImpl(users);
         when(userService.getAllUsers()).thenReturn(page);
         this.mockMvc.perform(get("/users")).andExpect(status().isOk());
+    }
+
+
+    @Test
+    void testGetAllUsers_ok2() throws Exception {
+        Page<User> page = new PageImpl(users);
+        when(userService.getAllUsers()).thenReturn(page);
+        this.mockMvc.perform(get("/users")
+            .param("sortby", "userName"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void testGetAllUsers_badRequest1() throws Exception {
+        this.mockMvc.perform(get("/users")
+            .param("sortOrder", "foo"))
+            .andExpect(status().isBadRequest());
+    }
+    @Test
+    void testGetAllUsers_badRequest2() throws Exception {
+        this.mockMvc.perform(get("/users")
+            .param("sortBy", "foo"))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -111,8 +136,20 @@ public class UserControllerTest {
         return mapper.writeValueAsString(o);
     }
 
+
     @Test
-    void testCreateUser() throws Exception{
+    void testCreateUser_invalidData() throws Exception{
+        User invalidUser = new User();
+        //invalidUser.setUserId(1L);
+        //when(userService.createUser(invalidUser)).thenReturn(invalidUser.getUserId());
+        this.mockMvc.perform(post("/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonify(invalidUser)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateUser_ok() throws Exception{
         when(userService.createUser(user1)).thenReturn(user1.getUserId());
         this.mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -147,10 +184,18 @@ public class UserControllerTest {
         public void serialize(
                 User user, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
             jsonGenerator.writeStartObject();
-            jsonGenerator.writeNumberField("userId", user.getUserId());
-            jsonGenerator.writeStringField("username", user.getUsername());
-            jsonGenerator.writeStringField("password", user.getPassword());
-            jsonGenerator.writeStringField("mail", user.getMail());
+            if(user.getUserId() != null){
+                jsonGenerator.writeNumberField("userId", user.getUserId());
+            }
+            if(user.getUsername() != null){
+                jsonGenerator.writeStringField("username", user.getUsername());
+            }
+            if(user.getPassword() != null){
+                jsonGenerator.writeStringField("password", user.getPassword());
+            }
+            if(user.getMail() != null){
+                jsonGenerator.writeStringField("mail", user.getMail());
+            }
             jsonGenerator.writeEndObject();
         }
     }

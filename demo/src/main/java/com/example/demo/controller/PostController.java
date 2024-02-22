@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Post;
 import com.example.demo.service.PostService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/posts")
 public class PostController {
@@ -28,7 +30,7 @@ public class PostController {
     }
 
     @PostMapping()
-    public Long createPost(@RequestBody Post post){
+    public Long createPost(@Valid @RequestBody Post post){
         return this.postService.createPost(post);
     }
 

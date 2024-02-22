@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public Long createUser(@Valid @RequestBody User user){
+    public Long createUser(@Valid() @RequestBody User user){
         return this.userService.createUser(user);
     }
 
@@ -63,7 +63,7 @@ public class UserController {
     public Page<User> getAllUsers(
             @RequestParam(name = "pageLimit", defaultValue = "10", required = false) @PositiveOrZero() Integer pageLimit, 
              @RequestParam(name = "pageOffset", defaultValue = "0", required = false) @PositiveOrZero Integer pageOffset,
-             @RequestParam(name = "sortBy", defaultValue = "userid", required = false)  @Pattern(regexp = "userid|username|mail|") String sortBy,
+             @RequestParam(name = "sortBy", defaultValue = "userId", required = false)  @Pattern(regexp = "userId|username|mail|") String sortBy,
            @RequestParam(name = "sortOrder", defaultValue = "asc", required = false)  @Pattern(regexp = "asc|desc")  String sortOrder){
         return this.userService.getAllUsers(Optional.ofNullable(pageLimit), 
                     Optional.ofNullable(pageOffset), Optional.ofNullable(sortBy), Optional.ofNullable(sortOrder));

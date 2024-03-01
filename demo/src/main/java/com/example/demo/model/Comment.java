@@ -19,7 +19,7 @@ public class Comment {
      * Not only registered users, but anybody can comment. 
      * Hence, comment author is a simple string
      **/
-    @Column(name="author")
+    @Column(name="author", nullable = false)
     private String author;
 
     @Column(name="commentID")
@@ -27,10 +27,10 @@ public class Comment {
     @Id
     private Long commentId;
 
-    @Column(name="content")
+    @Column(name="content", nullable = false)
     private String content;
 
-    @Column(name="date")
+    @Column(name="date", nullable = false)
     private LocalDateTime date;
 
     @ManyToOne

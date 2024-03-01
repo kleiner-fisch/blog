@@ -25,21 +25,21 @@ public class Post {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
     private Long postId;
-    @Column(name="title")
+    @Column(name="title", nullable = false)
     private String title;
-    @Column(name="content")
+    @Column(name="content", nullable = false)
     private String content;
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "userID")
-    private User author;
-    @Column(name="date")
+    private CustomUser author;
+    @Column(name="date", nullable = false)
     private LocalDateTime date;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Comment> comments;
 
-    public Post(Long postId, String title, String content, User author, LocalDateTime date, List<Comment> comments) {
+    public Post(Long postId, String title, String content, CustomUser author, LocalDateTime date, List<Comment> comments) {
         this.postId = postId;
         this.title = title;
         this.content = content;
@@ -69,10 +69,10 @@ public class Post {
     public void setContent(String content) {
         this.content = content;
     }
-    public User getAuthor() {
+    public CustomUser getAuthor() {
         return author;
     }
-    public void setAuthor(User author) {
+    public void setAuthor(CustomUser author) {
         this.author = author;
     }
     public LocalDateTime getDate() {

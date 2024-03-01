@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,8 +20,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name="User_Table")
-public class User {
+@Table(name="User_table")
+public class CustomUser {
     @Column(name="username", unique = true)
     private String username;
     @NotBlank(message = "password must not be empty")
@@ -34,13 +36,15 @@ public class User {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
+    
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Post> posts;
 
-    public User() {   }
+    public CustomUser() {   }
     
-    public User(Long userId, String username, String password, String mail, List<Post> posts) {
+    public CustomUser(Long userId, String username, String password, String mail, List<Post> posts) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -86,8 +90,8 @@ public class User {
 
     @Override
     public boolean equals(Object other){
-        if(other instanceof User){
-            User otherUser = (User) other;
+        if(other instanceof CustomUser){
+            CustomUser otherUser = (CustomUser) other;
             boolean result = otherUser.getMail().equals(getMail());
             result = result && otherUser.getPassword().equals(getPassword());
             result = result && otherUser.getUsername().equals(getUsername());

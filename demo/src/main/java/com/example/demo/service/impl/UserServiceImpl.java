@@ -1,16 +1,14 @@
 package com.example.demo.service.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import com.example.demo.Util;
 import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.model.User;
+import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -33,15 +31,15 @@ public class UserServiceImpl implements UserService{
 
     // TODO does not check whether username already exists and exposes internal error to client
     @Override
-    public Long createUser(User user) {
+    public Long createUser(CustomUser user) {
         this.userRepository.save(user);
         return user.getUserId();
     }
 
     @Override
-    public Long updateUser(Long userId, User user) {
+    public Long updateUser(Long userId, CustomUser user) {
         try {
-            User storedUser = this.userRepository.getReferenceById(userId);
+            CustomUser storedUser = this.userRepository.getReferenceById(userId);
             Util.updateValue(storedUser::setMail, storedUser.getMail());
             Util.updateValue(storedUser::setUsername, storedUser.getUsername());
             Util.updateValue(storedUser::setPassword, storedUser.getPassword());
@@ -58,9 +56,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public Long deleteUser(Long userId) {
         if(this.userRepository.existsById(userId)){
-            User toDelete = this.userRepository.getReferenceById(userId);
+            CustomUser toDelete = this.userRepository.getReferenceById(userId);
             if(!toDelete.getUsername().equals(UserService.DELETED_USER)){
-                User deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER);
+                CustomUser deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER);
                 var iterator = toDelete.getPosts().iterator();
                 while(iterator.hasNext()){
                     Post post = iterator.next();
@@ -84,7 +82,7 @@ public class UserServiceImpl implements UserService{
     
 
     @Override
-    public User getUser(Long userId) {
+    public CustomUser getUser(Long userId) {
         var user = this.userRepository.findById(userId);
         if (user.isPresent()){
             return user.get();
@@ -95,7 +93,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<User> getAllUsers(
+    public Page<CustomUser> getAllUsers(
             Optional<Integer> pageLimit,
             Optional<Integer> pageOffset,
             Optional<String> sortBy,
@@ -110,13 +108,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<User> getAllUsers() {
+    public Page<CustomUser> getAllUsers() {
         return this.getAllUsers(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
 
     @Override
-    public void addAllUsers(List<User> users) {
+    public void addAllUsers(List<CustomUser> users) {
         this.userRepository.saveAll(users);
     }
     

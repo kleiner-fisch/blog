@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +29,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 
-@RestController
+@Controller
 @RequestMapping("/users")
 @Validated
 public class UserController {
@@ -48,6 +51,7 @@ public class UserController {
     public Long updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody CustomUser user){
         return this.userService.updateUser(userId, user);
     }
+
 
     
     @GetMapping("/users/{userId}")

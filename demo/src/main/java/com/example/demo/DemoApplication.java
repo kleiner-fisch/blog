@@ -25,7 +25,6 @@ public class DemoApplication {
 				.version("v0.0.1")
 				.license(new License().name("Apache 2.0").url("http://springdoc.org")))
 				.externalDocs(new ExternalDocumentation()
-				.description("SpringShop Wiki Documentation")
 				.url("https://github.com/kleiner-fisch/blog"));
 	}
 }

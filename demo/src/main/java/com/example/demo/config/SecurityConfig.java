@@ -37,7 +37,7 @@ public class SecurityConfig {
           registry.requestMatchers("/admin").hasRole("ADMIN");
           registry.requestMatchers("/index", "/", "/register").permitAll();
     })
-        .formLogin(Customizer.withDefaults())
+        .formLogin(form -> form.defaultSuccessUrl("/posts/home"))
 		    .logout((logout) -> logout.permitAll())
         .build();
   }

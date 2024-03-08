@@ -34,9 +34,6 @@ public class UserController {
     public static final Integer DEFAULT_PAGE_LIMIT = 10;
     public static final Integer DEFAULT_PAGE_OFFSET = 0;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 
     // TODO in the api.yaml openAPI spec file we use user_id, instead of userId
     //      We should fix the api.yaml names to use camel case.
@@ -46,26 +43,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping()
-    public Long createUser(@Valid() @RequestBody CustomUser user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return this.userService.createUser(user);
-    }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/users/{userId}")
     public Long updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody CustomUser user){
         return this.userService.updateUser(userId, user);
     }
 
     
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     public CustomUser getUser(@PathVariable("userId") Long userId){
         return this.userService.getUser(userId);
     }
 
     // TODO the default value does not seem interpreted by openapi correctly...
     @Operation(description = "Returns a page of all users.")
-    @GetMapping()
+    @GetMapping("/users")
     public Page<CustomUser> getAllUsers(
             @RequestParam(name = "pageLimit", defaultValue = "10", required = false) @PositiveOrZero() Integer pageLimit, 
              @RequestParam(name = "pageOffset", defaultValue = "0", required = false) @PositiveOrZero Integer pageOffset,
@@ -75,7 +67,7 @@ public class UserController {
                     Optional.ofNullable(pageOffset), Optional.ofNullable(sortBy), Optional.ofNullable(sortOrder));
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/users/{userId}")
     public Long deleteUser(@PathVariable("userId") Long userId){
         return this.userService.deleteUser(userId);
     }

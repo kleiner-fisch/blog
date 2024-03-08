@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+   <html lang="en"
+   xmlns:th="http://www.thymeleaf.org" >
+ <head>
+     <meta charset="UTF-8">
+     <title>Simple Blog</title>
+    <link href="/webjars/bootsstrap/css/bootstrap.min.css"
+         rel="stylesheet"
+         type="text/css">
+ </head>
+   <body>
+      <h4>Welcome to my Simple Blog</h4>
+      <p>
+         The goal of this blog is to showcase basic Java Spring Boot backend development skills.
+         Documentation can be found on <a href="https://github.com/kleiner-fisch/blog">github</a>.
+      </p>
+      <p>
+         To use the blog you need to 
+         <a href="/register" th:href="@{/register}">register</a> and 
+         <a href="/login" th:href="@{/login}">login</a>.
+      </p>
+   </body>
+</html>
+

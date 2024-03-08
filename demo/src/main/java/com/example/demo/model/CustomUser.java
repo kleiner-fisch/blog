@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.example.demo.service.UserService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -35,6 +36,11 @@ public class CustomUser {
     @Column(name="userID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
+    @Column(name="roles", nullable = false)
+    // Assumes to be comma seperated list of roles i.e. "ADMIN,USER"
+    private String roles;
+
+
 
     
 
@@ -68,6 +74,16 @@ public class CustomUser {
     }
     public String getMail() {
         return mail;
+    }
+    /**
+     * returns the roles of this user. 
+     * An example is ADMIN,USER whch becomes a String array {ADMIN, USER} 
+     */
+    public String[] getRoles(){
+        return roles.split(UserService.SEPERATOR);
+    }
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public void setUsername(String username) {

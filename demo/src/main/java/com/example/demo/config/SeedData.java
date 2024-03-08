@@ -264,6 +264,7 @@ public class SeedData implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(password));
             user.setUsername(username);
             user.setPosts(new ArrayList<>());
+            user.setRoles(UserService.USER_ROLE);
 
             userMap.put(id, user);
         }

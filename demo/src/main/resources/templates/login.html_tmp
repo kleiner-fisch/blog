@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration and Login System</title>
+  <link href="/webjars/bootsstrap/css/bootstrap.min.css"
+        rel="stylesheet"
+        type="text/css">
+</head>
+<body>
+<h1 th:text="Login"></h1>
+<form action="@{/login}" th:object="${userForm}" method="POST" enctype="utf8">
+    <div>
+        <label th:text="username">username</label>
+        <input th:field="*{username}"/>
+    </div>
+    <div>
+        <label th:text="password">password</label>
+        <input th:field="*{username}"/>
+    </div>
+    <button type="submit" th:text="#{label.form.submit}">submit</button>
+</form>
+</body>
+</html>

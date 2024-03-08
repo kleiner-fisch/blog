@@ -9,7 +9,11 @@ import com.example.demo.model.CustomUser;
 public interface UserService {
 
 
-    public static String DELETED_USER = "deleted user";
+    public static final String DELETED_USER = "deleted user";
+    public static final String ADMIN = "admin";
+    public static final String USER_ROLE = "USER";
+    public static final String ADMIN_ROLE = "ADMIN";
+    public static final String SEPERATOR = ",";
 
     public Long createUser(CustomUser user);
     public Long updateUser(Long userId, CustomUser user);

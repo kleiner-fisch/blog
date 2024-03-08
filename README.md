@@ -60,4 +60,4 @@ To fill the blog with a sizable number (~100 authors, ~20000 posts, ~750000 comm
 - Add proper links in responses to allow discovery of the API by responses (hateoas)
 - Currently there are no real roles. 
   - We could have USERS and ADMINS. Then we can let ADMINs grant access to a special routine to populate the DB with the blog data
-
+- Currently CRSF is disabled

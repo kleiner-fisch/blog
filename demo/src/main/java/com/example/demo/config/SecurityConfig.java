@@ -5,14 +5,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.demo.service.impl.CustomUserDetailServiceImpl;
@@ -29,22 +33,29 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(registry -> {
-          registry.requestMatchers("/users/login").permitAll();
-          registry.requestMatchers("/users/register").permitAll();
-          registry.requestMatchers("/users/**").hasRole("USER");
-          registry.requestMatchers("/posts").hasRole("USER");
+          registry.requestMatchers("/users/**", "/posts/**").hasRole("USER");
           registry.requestMatchers("/admin").hasRole("ADMIN");
-          registry.anyRequest().authenticated();
+          registry.requestMatchers("/index", "/", "/register").permitAll();
     })
-        .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+        .formLogin(Customizer.withDefaults())
+		    .logout((logout) -> logout.permitAll())
         .build();
-
   }
 
   @Bean
   public UserDetailsService userDetailsService() {
     return userDetailService;
   }
+
+//   @Bean
+// public InMemoryUserDetailsManager userDetailsService() {
+//     UserDetails user = User.withUsername("user")
+//     .passwordEncoder(pw -> getPasswordEncoder().encode(pw))
+//     .password("pw")
+//       .roles("USER")
+//       .build();
+//     return new InMemoryUserDetailsManager(user);
+// }
 
   @Bean
   public AuthenticationProvider authentificationProvider() {
@@ -56,7 +67,7 @@ public class SecurityConfig {
 
   @Bean
   public PasswordEncoder getPasswordEncoder() {
-    return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder(4);
 
   }
 

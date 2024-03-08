@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS User_Table (
     username VARCHAR(20) NOT NULL,
     password VARCHAR(30) NOT NULL,
     mail VARCHAR(50) NOT NULL,
+	roles VARCHAR(50) NOT NULL,
     PRIMARY KEY (userID AUTOINCREMENT),
     UNIQUE(username)
 );

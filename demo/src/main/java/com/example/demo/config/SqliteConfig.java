@@ -24,8 +24,8 @@ class SqliteConfig {
         dataSource.setDriverClassName(env.getProperty("driverClassName"));
         dataSource.setUrl("jdbc:sqlite:/" + dbPath.toAbsolutePath());
 
-        dataSource.setUsername(env.getProperty("user"));
-        dataSource.setPassword(env.getProperty("password"));
+        // dataSource.setUsername(env.getProperty("user"));
+        // dataSource.setPassword(env.getProperty("password"));
         return dataSource;
     }
 }

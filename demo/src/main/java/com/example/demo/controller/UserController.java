@@ -63,8 +63,8 @@ public class UserController {
 
         Integer offset = PostService.DEFAULT_PAGE_OFFSET;
         Integer limit = PostService.DEFAULT_PAGE_LIMIT;
-        String sortColumn = "postId";
-        String sortDirection = "asc";
+        String sortColumn = "date";
+        String sortDirection = "desc";
         var pageRequest = PageRequest.of(offset, limit,
                 Direction.fromString(sortDirection), sortColumn);
         PageImpl<Post> page = new PageImpl<>(user.getPosts(), pageRequest, user.getPosts().size());

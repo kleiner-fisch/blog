@@ -94,8 +94,8 @@ public class PostServiceImpl implements PostService {
             Optional<String> sortOrder) {
         Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
         Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-        String sortColumn = sortBy.orElseGet(() -> "postId");
-        String sortDirection = sortOrder.orElseGet(() -> "asc");
+        String sortColumn = sortBy.orElseGet(() -> "date");
+        String sortDirection = sortOrder.orElseGet(() -> "desc");
         var pageRequest = PageRequest.of(offset, limit,
                 Direction.fromString(sortDirection), sortColumn);
         return this.postRepository.findAll(pageRequest);

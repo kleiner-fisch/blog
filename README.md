@@ -62,4 +62,9 @@ To fill the blog with a sizable number (~100 authors, ~20000 posts, ~750000 comm
 - Properly display UTF-8 characters
 - improve layout 
   - Probably not in thymeleaf. Use React
+
+### Next steps
+- Logout
+- create posts
+- create comments
 - Error pages, to indicate e.g. incorrect input. E.g. cannot register, cause username is already in use

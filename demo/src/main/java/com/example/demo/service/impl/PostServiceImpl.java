@@ -6,13 +6,16 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Util;
 import com.example.demo.exception.PostNotFoundException;
+import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostService;
+import com.example.demo.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -22,17 +25,24 @@ public class PostServiceImpl implements PostService {
 
 
     private PostRepository postRepository;
+    private UserService userService;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
     @Override
     public Long createPost(Post post) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        CustomUser user = userService.getUserByUsername(username);
+        if(user == null) throw new IllegalStateException("call to create post without logged in user!"); 
+        post.setAuthor(user);
         post.setDate(LocalDateTime.now());
         this.postRepository.save(post);
         return post.getPostId();
     }
+
 /*
     TODO:
 

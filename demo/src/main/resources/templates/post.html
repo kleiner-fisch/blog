@@ -12,6 +12,7 @@
          <text th:text="'Logged in as ' + ${username}">username</text>
          <a th:href="@{'/posts/' + ${post.postId} + '/comments/new'}"
                th:text="'create comment'">Title</a>
+         <a th:href="@{'/logout'}" th:text="'logout'">logout</a>
       </h4>
          <div class="post"  >
             <h4 th:text="${post.title}">

@@ -12,7 +12,10 @@
         type="text/css">  -->
 </head>
 <body>
-<h1 th:text="'Create Post'"></h1>
+<h1 >
+    <text th:text="'Create Post'">create post</text>
+    <a th:href="@{'/logout'}" th:text="'logout'">logout</a>
+</h1>
 <form th:action="@{/posts/new}" th:object="${postForm}" method="POST" enctype="utf8">
     <div>
         <p>title: <input type="text" th:field="*{title}"/></p>

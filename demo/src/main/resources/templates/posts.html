@@ -10,6 +10,7 @@
    <body>
       <h4 >
          <text th:text="'Logged in as ' + ${username}">username</text>
+         <a th:href="@{'/posts/home'}" th:text="'home'">home</a>
          <a th:href="@{'/logout'}" th:text="'logout'">logout</a>
       </h4>
       <div class="posts-container">

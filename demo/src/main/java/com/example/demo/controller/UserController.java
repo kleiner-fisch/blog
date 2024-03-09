@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.CustomUser;
+import com.example.demo.model.Post;
+import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,8 +55,25 @@ public class UserController {
         return this.userService.updateUser(userId, user);
     }
 
+    // TODO can we handle spaces in user names? do we allow that?
 
-    
+    @RequestMapping("/{username}/posts")
+    public String showUserPosts(Model model, @PathVariable("username") String username){
+        CustomUser user = this.userService.getUserByUsername(username);
+
+        Integer offset = PostService.DEFAULT_PAGE_OFFSET;
+        Integer limit = PostService.DEFAULT_PAGE_LIMIT;
+        String sortColumn = "postId";
+        String sortDirection = "asc";
+        var pageRequest = PageRequest.of(offset, limit,
+                Direction.fromString(sortDirection), sortColumn);
+        PageImpl<Post> page = new PageImpl<>(user.getPosts(), pageRequest, user.getPosts().size());
+        model.addAttribute("pagePosts", page);
+        return "posts";
+    }
+
+
+
     @GetMapping("/users/{userId}")
     public CustomUser getUser(@PathVariable("userId") Long userId){
         return this.userService.getUser(userId);

@@ -19,8 +19,7 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class PostServiceImpl implements PostService {
 
-    public static final Integer DEFAULT_PAGE_LIMIT = 10;
-    public static final Integer DEFAULT_PAGE_OFFSET = 0;
+
 
     private PostRepository postRepository;
 

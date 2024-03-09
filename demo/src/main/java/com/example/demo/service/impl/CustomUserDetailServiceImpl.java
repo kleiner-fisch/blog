@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,14 +22,14 @@ public class CustomUserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        CustomUser user = userRepository.findByUsername(username);
-        if(user == null){
+        Optional<CustomUser> user = userRepository.findByUsername(username);
+        if(user.isEmpty()){
             throw new UsernameNotFoundException(username);
         }else {
         return User.builder()
-            .username(user.getUsername())
-            .password(user.getPassword())
-            .roles(user.getRoles())
+            .username(user.get().getUsername())
+            .password(user.get().getPassword())
+            .roles(user.get().getRoles())
             .build();
         }
     }

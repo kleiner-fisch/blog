@@ -188,7 +188,7 @@ public class UserServiceImplTest {
 
 
         when(userRepository.getReferenceById(anyLong())).thenReturn(toDelete);
-        when(userRepository.findByUsername(UserService.DELETED_USER)).thenReturn(specialDeletedUser);
+        when(userRepository.findByUsername(UserService.DELETED_USER)).thenReturn(Optional.of(specialDeletedUser));
 
         userService.deleteUser(toDelete.getUserId());
 

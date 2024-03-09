@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import com.example.demo.model.Post;
 
 public interface PostService {
+    public static final Integer DEFAULT_PAGE_LIMIT = 10;
+    public static final Integer DEFAULT_PAGE_OFFSET = 0;
+    
     public Long createPost(Post post);
     public Long updatePost(Long postId, Post post);
     public Long deletePost(Long postId);

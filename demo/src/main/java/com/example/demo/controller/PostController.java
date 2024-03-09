@@ -74,9 +74,17 @@ public class PostController {
         return this.postService.updatePost(postId, post);
     }
 
-    @GetMapping("/{postId}")
-    public Post getPost(@PathVariable("postId") Long postId){
-        return this.postService.getPost(postId);
+    //TODO need a header with current user name, and some essential links (home, logout)
+
+    @RequestMapping("/{postId}")
+    public String getPost(Model model, @PathVariable("postId") Long postId){
+        Post post = this.postService.getPost(postId);
+        model.addAttribute("post", post);
+
+        final String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("username", currentUserName);
+
+        return "post";
     }
 
 

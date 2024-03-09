@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService{
         if(this.userRepository.existsById(userId)){
             CustomUser toDelete = this.userRepository.getReferenceById(userId);
             if(!toDelete.getUsername().equals(UserService.DELETED_USER)){
-                CustomUser deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER);
+                CustomUser deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER).orElseThrow();
                 var iterator = toDelete.getPosts().iterator();
                 while(iterator.hasNext()){
                     Post post = iterator.next();
@@ -76,11 +76,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean userExists(String username){
-        var user = Optional.ofNullable(this.userRepository.findByUsername(username));
+        var user = this.userRepository.findByUsername(username);
         return user.isPresent();
     }
     
-
+    @Override
+    public CustomUser getUserByUsername(String username) {
+        Optional<CustomUser> user = this.userRepository.findByUsername(username);
+        if (user.isPresent()){
+            return user.get();
+        }else {
+            String msg = "Requested user not found. Given userID: " + username;
+            throw new UserNotFoundException(msg);
+        }
+    }
     @Override
     public CustomUser getUser(Long userId) {
         var user = this.userRepository.findById(userId);

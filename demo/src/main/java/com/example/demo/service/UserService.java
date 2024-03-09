@@ -37,5 +37,7 @@ public interface UserService {
 
     public void flush();
 
+    public CustomUser getUserByUsername(String username);
+
 
 }

@@ -46,13 +46,13 @@ public class  UserRepositoryTest {
 
     @Test
     public void testFindByUsername_Found(){
-        CustomUser user = userRepository.findByUsername("bob");
+        CustomUser user = userRepository.findByUsername("bob").get();
         assertThat(user).isEqualTo(this.testUser);
     }
 
     @Test
     public void testFindByUsername_NotFound(){
-        CustomUser user = userRepository.findByUsername("alice");
+        CustomUser user = userRepository.findByUsername("alice").get();
         assertThat(user).isNull();
     }
 

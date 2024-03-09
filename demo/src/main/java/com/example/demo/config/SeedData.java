@@ -142,7 +142,7 @@ public class SeedData implements CommandLineRunner {
             String content = m.group().substring(1, m.group().length() -1);    
 
             m.find();
-            String author = m.group();
+            String author = m.group().replaceAll("\"", "");
 
             m.find();
 

@@ -3,8 +3,11 @@ package com.example.demo.controller;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,22 +17,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Comment;
+import com.example.demo.model.Post;
 import com.example.demo.service.CommentService;
 
-@RestController
+@Controller
 @RequestMapping("/posts/{postId}/comments")
 public class CommentController {
 
 
     private CommentService commentService;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService) { 
         this.commentService = commentService;
     }
+    
+    @RequestMapping("/new")
+    public String registerForm(Model model,  @PathVariable("postId") Long postId){
+        model.addAttribute("commentForm", new Comment());
+        return "commentForm";
+    }
 
-    @PostMapping()
-    public Long createComment(@PathVariable("postId") Long postId, @RequestBody Comment comment){
-        return this.commentService.createComment(comment, postId);
+
+    @PostMapping("/new")
+    public String createComment(@ModelAttribute("commentForm") Comment comment, @PathVariable("postId") Long postId){
+        this.commentService.createComment(comment, postId);
+        return "redirect:/posts/" + postId;
     }
 
     @PutMapping("/{commentId}")

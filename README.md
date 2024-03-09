@@ -68,3 +68,5 @@ To fill the blog with a sizable number (~100 authors, ~20000 posts, ~750000 comm
 - create posts
 - create comments
 - Error pages, to indicate e.g. incorrect input. E.g. cannot register, cause username is already in use
+- update user and posts
+- delete posts and users

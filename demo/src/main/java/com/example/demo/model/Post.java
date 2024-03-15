@@ -31,7 +31,7 @@ public class Post {
     private String content;
     @ManyToOne
     @JoinColumn(name = "userID", referencedColumnName = "userID")
-    private User author;
+    private CustomUser author;
     @Column(name="date")
     private LocalDateTime date;
 
@@ -39,7 +39,7 @@ public class Post {
     @JsonIgnore
     private List<Comment> comments;
 
-    public Post(Long postId, String title, String content, User author, LocalDateTime date, List<Comment> comments) {
+    public Post(Long postId, String title, String content, CustomUser author, LocalDateTime date, List<Comment> comments) {
         this.postId = postId;
         this.title = title;
         this.content = content;
@@ -69,10 +69,10 @@ public class Post {
     public void setContent(String content) {
         this.content = content;
     }
-    public User getAuthor() {
+    public CustomUser getAuthor() {
         return author;
     }
-    public void setAuthor(User author) {
+    public void setAuthor(CustomUser author) {
         this.author = author;
     }
     public LocalDateTime getDate() {

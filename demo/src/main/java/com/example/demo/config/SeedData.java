@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.model.Comment;
 import com.example.demo.model.Post;
-import com.example.demo.model.User;
+import com.example.demo.model.CustomUser;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
@@ -99,7 +99,7 @@ public class SeedData implements CommandLineRunner {
 
     class Parser {        
         
-        Map<Long,User> userMap = new HashMap<>();
+        Map<Long,CustomUser> userMap = new HashMap<>();
         Map<Long,Post> postMap = new HashMap<>();
         Map<Long,Comment> commentMap = new HashMap<>();
 
@@ -146,7 +146,7 @@ public class SeedData implements CommandLineRunner {
             String content = m.group().substring(1, m.group().length() -1);    
 
             m.find();
-            String author = m.group();
+            String author = m.group().replaceAll("\"", "");
 
             m.find();
 
@@ -234,7 +234,7 @@ public class SeedData implements CommandLineRunner {
             int contentEnd = newLine.length() - m.end() - 2;
             String content = newLine.substring(startContent, contentEnd);
             
-            User author = userMap.get(authorID);
+            CustomUser author = userMap.get(authorID);
             Post post = new Post();
             post.setAuthor(author);
             post.setContent(removeSpecialString(content));
@@ -251,7 +251,7 @@ public class SeedData implements CommandLineRunner {
         }
 
 
-        private void validateUsers(List<User> users) {
+        private void validateUsers(List<CustomUser> users) {
         }
 
 
@@ -262,12 +262,13 @@ public class SeedData implements CommandLineRunner {
             String username = createUserName(parts[1]);
             String mail = createMail(username);
             String password = "pw";
-            User user = new User( );
+            CustomUser user = new CustomUser( );
 
             user.setMail(mail);
             user.setPassword(password);
             user.setUsername(username);
             user.setPosts(new ArrayList<>());
+            user.setRoles(CustomUser.USER_ROLE);
             userMap.put(id, user);
         }
 

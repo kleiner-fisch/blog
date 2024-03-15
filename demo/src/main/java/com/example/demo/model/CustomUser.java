@@ -19,7 +19,13 @@ import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="User_Table")
-public class User {
+public class CustomUser {
+
+    public static final String USER_ROLE = "USER";
+    public static final String ADMIN_ROLE = "ADMIN";
+    public static final String ROLE_SEPERATOR = ",";
+
+
     @Column(name="username", unique = true)
     private String username;
     @NotBlank(message = "password must not be empty")
@@ -34,18 +40,22 @@ public class User {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(name="roles")
+    private String roles;
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private List<Post> posts;
 
-    public User() {   }
+    public CustomUser() {   }
     
-    public User(Long userId, String username, String password, String mail, List<Post> posts) {
+    public CustomUser(Long userId, String username, String password, String mail, String roles, List<Post> posts) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.mail = mail;
         this.posts = posts;
+        this.roles = roles;
     }
 
     public List<Post> getPosts() {
@@ -76,6 +86,14 @@ public class User {
         this.mail = mail;
     }
 
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+    public String[] getRoles() {
+        return roles.split(ROLE_SEPERATOR);
+    }
+
+
     public Long getUserId() {
         return userId;
     }
@@ -86,8 +104,8 @@ public class User {
 
     @Override
     public boolean equals(Object other){
-        if(other instanceof User){
-            User otherUser = (User) other;
+        if(other instanceof CustomUser){
+            CustomUser otherUser = (CustomUser) other;
             boolean result = otherUser.getMail().equals(getMail());
             result = result && otherUser.getPassword().equals(getPassword());
             result = result && otherUser.getUsername().equals(getUsername());
@@ -105,4 +123,5 @@ public class User {
                ", mail: " + this.mail;
         return result;
     }
+
 }

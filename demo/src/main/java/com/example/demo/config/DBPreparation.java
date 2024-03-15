@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.model.User;
+import com.example.demo.model.CustomUser;
 import com.example.demo.service.UserService;
 
 @DependsOnDatabaseInitialization
@@ -28,9 +28,10 @@ public class DBPreparation implements CommandLineRunner{
 
     private void addDeleteUser() {
         if(!userService.userExists(UserService.DELETED_USER)){
-            User deleteUser = new User();
+            CustomUser deleteUser = new CustomUser();
             deleteUser.setMail("deleted");
             deleteUser.setPassword("pw");
+            deleteUser.setRoles(CustomUser.USER_ROLE);
             deleteUser.setPosts(Collections.emptyList());
             deleteUser.setUsername(UserService.DELETED_USER);
             userService.createUser(deleteUser);

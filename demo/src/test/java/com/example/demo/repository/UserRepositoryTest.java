@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import static org.assertj.core.api.Assertions.assertThat;
-import com.example.demo.model.User;
+import com.example.demo.model.CustomUser;
 
 @DataJpaTest
 public class  UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
-    private User testUser;
+    private CustomUser testUser;
 
     // TODO I dont like the autowired annotation that much.
     //      How can instantiate this class as I have the other classes were I avoided @Autowired?
@@ -26,7 +26,7 @@ public class  UserRepositoryTest {
 
     @BeforeEach
     private void setUp(){
-        testUser = new User();
+        testUser = new CustomUser();
         testUser.setMail("test@mail.com");
         testUser.setPassword("abc");
         testUser.setUsername("bob");
@@ -41,13 +41,13 @@ public class  UserRepositoryTest {
 
     @Test
     public void testFindByUsername_Found(){
-        User user = userRepository.findByUsername("bob");
+        CustomUser user = userRepository.findByUsername("bob").get();
         assertThat(user).isEqualTo(this.testUser);
     }
 
     @Test
     public void testFindByUsername_NotFound(){
-        User user = userRepository.findByUsername("alice");
+        CustomUser user = userRepository.findByUsername("alice").get();
         assertThat(user).isNull();
     }
 

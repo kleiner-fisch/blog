@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.User;
+import com.example.demo.model.CustomUser;
 import com.example.demo.service.UserService;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -62,14 +62,14 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    private User user1;
-    private User user2;
-    private List<User> users = new ArrayList<>();
+    private CustomUser user1;
+    private CustomUser user2;
+    private List<CustomUser> users = new ArrayList<>();
 
     @BeforeEach
     private void setUp() {
-        user1 = new User(1L, "user1", "abc", "mail@comp.org", Collections.emptyList());
-        user1 = new User(2L, "user2", "abc", "mail@com.org", Collections.emptyList());
+        user1 = new CustomUser(1L, "user1", "abc", "mail@comp.org", CustomUser.USER_ROLE, Collections.emptyList());
+        user1 = new CustomUser(2L, "user2", "abc", "mail@com.org", CustomUser.USER_ROLE, Collections.emptyList());
         users.add(user1);
         users.add(user2);
 
@@ -88,7 +88,7 @@ public class UserControllerTest {
 
     @Test
     void testGetAllUsers_ok1() throws Exception {
-        Page<User> page = new PageImpl(users);
+        Page<CustomUser> page = new PageImpl(users);
         when(userService.getAllUsers()).thenReturn(page);
         this.mockMvc.perform(get("/users")).andExpect(status().isOk());
     }
@@ -96,7 +96,7 @@ public class UserControllerTest {
 
     @Test
     void testGetAllUsers_ok2() throws Exception {
-        Page<User> page = new PageImpl(users);
+        Page<CustomUser> page = new PageImpl(users);
         when(userService.getAllUsers()).thenReturn(page);
         this.mockMvc.perform(get("/users")
             .param("sortby", "userName"))
@@ -131,7 +131,7 @@ public class UserControllerTest {
     private String jsonify(Object o) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule("CustomCarSerializer", new Version(1, 0, 0, null, null, null));
-        module.addSerializer(User.class, new CustomCarSerializer());
+        module.addSerializer(CustomUser.class, new CustomCarSerializer());
         mapper.registerModule(module);
         return mapper.writeValueAsString(o);
     }
@@ -139,7 +139,7 @@ public class UserControllerTest {
 
     @Test
     void testCreateUser_invalidData() throws Exception{
-        User invalidUser = new User();
+        CustomUser invalidUser = new CustomUser();
         //invalidUser.setUserId(1L);
         //when(userService.createUser(invalidUser)).thenReturn(invalidUser.getUserId());
         this.mockMvc.perform(post("/users")
@@ -170,19 +170,19 @@ public class UserControllerTest {
     /**
      * Custom serializer that does serialize the user password.
      */
-    class CustomCarSerializer extends StdSerializer<User> {
+    class CustomCarSerializer extends StdSerializer<CustomUser> {
 
         public CustomCarSerializer() {
             this(null);
         }
 
-        public CustomCarSerializer(Class<User> t) {
+        public CustomCarSerializer(Class<CustomUser> t) {
             super(t);
         }
 
         @Override
         public void serialize(
-                User user, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
+                CustomUser user, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
             jsonGenerator.writeStartObject();
             if(user.getUserId() != null){
                 jsonGenerator.writeNumberField("userId", user.getUserId());

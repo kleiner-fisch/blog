@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.User;
+import com.example.demo.model.CustomUser;
 import com.example.demo.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,25 +42,25 @@ public class UserController {
     }
 
     @PostMapping()
-    public Long createUser(@Valid @RequestBody User user){
+    public Long createUser(@Valid @RequestBody CustomUser user){
         return this.userService.createUser(user);
     }
 
     @PutMapping("/{userId}")
-    public Long updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody User user){
+    public Long updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody CustomUser user){
         return this.userService.updateUser(userId, user);
     }
 
     
     @GetMapping("/{userId}")
-    public User getUser(@PathVariable("userId") Long userId){
+    public CustomUser getUser(@PathVariable("userId") Long userId){
         return this.userService.getUser(userId);
     }
 
     // TODO the default value does not seem interpreted by openapi correctly...
     @Operation(description = "Returns a page of all users.")
     @GetMapping()
-    public Page<User> getAllUsers(
+    public Page<CustomUser> getAllUsers(
             @RequestParam(name = "pageLimit", defaultValue = "10", required = false) @PositiveOrZero() Integer pageLimit, 
              @RequestParam(name = "pageOffset", defaultValue = "0", required = false) @PositiveOrZero Integer pageOffset,
              @RequestParam(name = "sortBy", defaultValue = "userId", required = false)  @Pattern(regexp = "userId|username|mail|") String sortBy,

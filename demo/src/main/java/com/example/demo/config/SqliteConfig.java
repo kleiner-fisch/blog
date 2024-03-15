@@ -20,12 +20,9 @@ class SqliteConfig {
     @Bean
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        Path dbPath = Path.of(env.getProperty("absoluteDBPath"));
+        Path dbPath = Path.of(env.getProperty("dBPath"));
         dataSource.setDriverClassName(env.getProperty("driverClassName"));
         dataSource.setUrl("jdbc:sqlite:/" + dbPath.toAbsolutePath());
-
-        dataSource.setUsername(env.getProperty("user"));
-        dataSource.setPassword(env.getProperty("password"));
         return dataSource;
     }
 }

@@ -40,8 +40,8 @@ public class SecurityConfig {
     httpSecurity.authorizeHttpRequests(registry -> 
     {
         registry.requestMatchers(HttpMethod.POST, "/users").permitAll();
-        registry.requestMatchers(HttpMethod.GET, "/users").permitAll();
-      registry.requestMatchers(HttpMethod.GET, "/users/**", "/posts/**").hasAnyRole(CustomUser.ADMIN_ROLE, CustomUser.USER_ROLE);
+      registry.requestMatchers(HttpMethod.GET, "/users", "/users/**", "/posts/**").hasAnyRole(CustomUser.ADMIN_ROLE, CustomUser.USER_ROLE);
+      registry.requestMatchers(HttpMethod.POST, "/posts", "/posts/**").hasAnyRole(CustomUser.ADMIN_ROLE, CustomUser.USER_ROLE);
       registry.requestMatchers(HttpMethod.GET, "/admin").hasRole(CustomUser.ADMIN_ROLE);
       registry.requestMatchers(HttpMethod.GET, "/index", "/", "/register").permitAll();
     });
@@ -78,14 +78,14 @@ public class SecurityConfig {
     return provider;
   }
 
-//   @Bean
-//   public PasswordEncoder getPasswordEncoder() {
-//     return new BCryptPasswordEncoder(4);
-//   }
+  @Bean
+  public PasswordEncoder getPasswordEncoder() {
+    return new BCryptPasswordEncoder(4);
+  }
 
-      @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+    //   @Bean
+    // public PasswordEncoder getPasswordEncoder() {
+    //     return NoOpPasswordEncoder.getInstance();
+    // }
 
 }

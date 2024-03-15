@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,13 +38,17 @@ public class UserController {
     //      We should fix the api.yaml names to use camel case.
     private UserService userService;
 
-    public UserController(UserService userService) {
+    private PasswordEncoder passwordEncoder;
+
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping()
     public Long createUser(@Valid @RequestBody CustomUser user){
         user.setRoles(CustomUser.USER_ROLE);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return this.userService.createUser(user);
     }
 

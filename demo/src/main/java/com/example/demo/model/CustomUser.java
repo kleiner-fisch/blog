@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -26,14 +29,15 @@ public class CustomUser {
     public static final String ROLE_SEPERATOR = ",";
 
 
-    @Column(name="username", unique = true)
+    @Column(name="username", unique = true )
+    @NotBlank(message = "username must not be null or only whitespace")
     private String username;
     @NotBlank(message = "password must not be empty")
     @Column(name="password", nullable = false)
     @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @Column(name="mail")
-    @Email()
+    @Email(message = "given email address is not wellformed")
     private String mail;
     @Id
     @Column(name="userID")

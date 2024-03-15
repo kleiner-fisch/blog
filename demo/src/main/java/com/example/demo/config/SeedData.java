@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.model.Comment;
@@ -34,10 +35,9 @@ import com.example.demo.service.UserService;
 @Component
 public class SeedData implements CommandLineRunner {
 
-    private PostService postService;
 
     private UserService userService;
-    private CommentService commentService;
+    private PasswordEncoder passwordEncoder;
 
     private  String usersFilePath ;
     private  String postsFilePath ;
@@ -47,10 +47,9 @@ public class SeedData implements CommandLineRunner {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    public SeedData(UserService userService, PostService postService, CommentService commentService, Environment env) {
+    public SeedData(UserService userService, Environment env, PasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.postService = postService;
-        this.commentService = commentService;
+        this.passwordEncoder = passwordEncoder;
 
         Optional<Boolean> tmp  = Optional.ofNullable(env.getProperty("replaceBlogData", Boolean.class));
         this.seedBlogData = tmp.orElse(Boolean.FALSE);
@@ -265,7 +264,7 @@ public class SeedData implements CommandLineRunner {
             CustomUser user = new CustomUser( );
 
             user.setMail(mail);
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
             user.setUsername(username);
             user.setPosts(new ArrayList<>());
             user.setRoles(CustomUser.USER_ROLE);

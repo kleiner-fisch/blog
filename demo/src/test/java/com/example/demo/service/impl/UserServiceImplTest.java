@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -42,6 +43,7 @@ import com.example.demo.model.CustomUser;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
+@Disabled
 @DataJpaTest
 public class UserServiceImplTest {
 

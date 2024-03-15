@@ -43,6 +43,7 @@ public class UserController {
 
     @PostMapping()
     public Long createUser(@Valid @RequestBody CustomUser user){
+        user.setRoles(CustomUser.USER_ROLE);
         return this.userService.createUser(user);
     }
 

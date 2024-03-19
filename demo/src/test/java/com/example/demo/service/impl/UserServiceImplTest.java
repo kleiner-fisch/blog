@@ -43,6 +43,9 @@ import com.example.demo.model.CustomUser;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
+import static com.example.demo.service.DefaultValues.DELETED_USER;;
+
+
 @Disabled
 @DataJpaTest
 public class UserServiceImplTest {
@@ -189,7 +192,7 @@ public class UserServiceImplTest {
         CustomUser toDelete = testUserWithId2;
         CustomUser specialDeletedUser = testUserWithId1;
         specialDeletedUser.setPosts(new ArrayList<>());
-        specialDeletedUser.setUsername(UserService.DELETED_USER);
+        specialDeletedUser.setUsername(DELETED_USER);
 
         Post post = new Post(1L, "Test Title", "Test Content", toDelete, null, Collections.emptyList());
         //toDelete.setPosts(new ArrayList<Post>(Arrays.asList(post)));
@@ -197,7 +200,7 @@ public class UserServiceImplTest {
 
 
         when(userRepository.getReferenceById(anyLong())).thenReturn(toDelete);
-        when(userRepository.findByUsername(UserService.DELETED_USER)).thenReturn(Optional.of(specialDeletedUser));
+        when(userRepository.findByUsername(DELETED_USER)).thenReturn(Optional.of(specialDeletedUser));
 
         userService.deleteUser(toDelete.getUserId());
 

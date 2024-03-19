@@ -23,6 +23,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.example.demo.model.CustomUser;
 import com.example.demo.service.impl.CustomUserDetailServiceImpl;
 
+
+import static com.example.demo.service.DefaultValues.ADMIN_ROLE;
+import static com.example.demo.service.DefaultValues.USER_ROLE;;
+
 @Configuration
 @EnableWebSecurity
 // @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
@@ -34,16 +38,31 @@ public class SecurityConfig {
 // @Autowired
 // private PasswordEncoder passwordEncoder;
 
+private static final String[] AUTH_WHITELIST = {
+    // -- Swagger UI v2
+    "/v2/api-docs",
+    "/swagger-resources",
+    "/swagger-resources/**",
+    "/configuration/ui",
+    "/configuration/security",
+    "/swagger-ui.html",
+    "/webjars/**",
+    // -- Swagger UI v3 (OpenAPI)
+    "/v3/api-docs/**",
+    "/swagger-ui/**"
+    // other public endpoints of your API may be appended to this array
+};
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
     httpSecurity.authorizeHttpRequests(registry -> 
     {
         registry.requestMatchers(HttpMethod.POST, "/users").permitAll();
-      registry.requestMatchers(HttpMethod.GET, "/users", "/users/**", "/posts/**").hasAnyRole(CustomUser.ADMIN_ROLE, CustomUser.USER_ROLE);
-      registry.requestMatchers(HttpMethod.POST, "/posts", "/posts/**").hasAnyRole(CustomUser.ADMIN_ROLE, CustomUser.USER_ROLE);
-      registry.requestMatchers(HttpMethod.GET, "/admin").hasRole(CustomUser.ADMIN_ROLE);
-      registry.requestMatchers(HttpMethod.GET, "/index", "/", "/register").permitAll();
+      registry.requestMatchers(HttpMethod.GET, "/users", "/users/**", "/posts", "/posts/**").permitAll();
+      registry.requestMatchers(HttpMethod.POST, "/posts", "/posts/**").hasAnyRole(ADMIN_ROLE, USER_ROLE);
+      registry.requestMatchers(HttpMethod.GET, "/admin").hasRole(ADMIN_ROLE);
+      registry.requestMatchers( AUTH_WHITELIST).hasAnyRole(ADMIN_ROLE, USER_ROLE);
     });
 
     httpSecurity.csrf(AbstractHttpConfigurer::disable);

@@ -41,4 +41,10 @@ public class BlogExceptionHandler {
         BlogException newException = new BlogException(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(newException, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {NotAuthorizedException.class})
+    public ResponseEntity<Object> handleAuthorizationException(NotAuthorizedException e){
+        BlogException newException = new BlogException(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(newException, HttpStatus.UNAUTHORIZED);
+    }
 }

@@ -31,6 +31,9 @@ import com.example.demo.service.CommentService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 
+import static com.example.demo.service.DefaultValues.USER_ROLE;
+
+
 @DependsOnDatabaseInitialization
 @Component
 public class SeedData implements CommandLineRunner {
@@ -267,7 +270,7 @@ public class SeedData implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(password));
             user.setUsername(username);
             user.setPosts(new ArrayList<>());
-            user.setRoles(CustomUser.USER_ROLE);
+            user.setRoles(USER_ROLE);
             userMap.put(id, user);
         }
 

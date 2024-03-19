@@ -6,9 +6,14 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import com.example.demo.Util;
+import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
@@ -16,6 +21,12 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
+
+import static com.example.demo.service.DefaultValues.DELETED_USER;
+import static com.example.demo.service.DefaultValues.ADMIN_ROLE;
+import static com.example.demo.service.DefaultValues.DEFAULT_SORTING_DIRECTION;
+import static com.example.demo.service.DefaultValues.DEFAULT_USER_SORTING_COLUMN;
+
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -38,6 +49,14 @@ public class UserServiceImpl implements UserService{
         return user.getUserId();
     }
 
+
+    private boolean currentSessionMayModify(String username){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User  user = (User) auth.getPrincipal();
+        return user.getUsername().equals(username) || user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(ADMIN_ROLE));
+    }
+
+
     @Override
     public Long updateUser(Long userId, CustomUser user) {
         try {
@@ -53,27 +72,39 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    private void validateDeleteRequest(Long toDeleteID){
+        if(!this.userRepository.existsById(toDeleteID)){
+            String msg = "Requested user not found. Given userID: " + toDeleteID;
+            throw new UserNotFoundException(msg);
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User  currentUser = (User) auth.getPrincipal();
+        CustomUser toDeleteUser = this.getUser(toDeleteID);
+        if(!currentSessionMayModify(toDeleteUser.getUsername())){
+            throw new NotAuthorizedException("User with username " + currentUser.getUsername() + "is not authorized to delete user with ID " + toDeleteID);
+        }
+        if(toDeleteUser.getUsername().equals(DELETED_USER)){
+            throw new NotAuthorizedException("user with username " + DELETED_USER + " cannot be deleted" );
+        }
+
+    }
 
     // TODO This behavior here is something we could document using swagger
     @Override
     public Long deleteUser(Long userId) {
-        if(this.userRepository.existsById(userId)){
-            CustomUser toDelete = this.userRepository.getReferenceById(userId);
-            if(!toDelete.getUsername().equals(UserService.DELETED_USER)){
-                CustomUser deletedUser = this.userRepository.findByUsername(UserService.DELETED_USER).get();
-                var iterator = toDelete.getPosts().iterator();
-                while(iterator.hasNext()){
-                    Post post = iterator.next();
-                    post.setAuthor(deletedUser);
-                    deletedUser.getPosts().add(post);
-                    iterator.remove();
-                }
-                this.userRepository.delete(toDelete);
-                return userId;
-            }
+        validateDeleteRequest(userId);
+        CustomUser toDelete = this.getUser(userId);
+        // ensure we don't delete the special delete user
+        CustomUser specialUser = this.userRepository.findByUsername(DELETED_USER).get();
+        var iterator = toDelete.getPosts().iterator();
+        while(iterator.hasNext()){
+            Post post = iterator.next();
+            post.setAuthor(specialUser);
+            specialUser.getPosts().add(post);
+            iterator.remove();
         }
-        String msg = "Requested user not found. Given userID: " + userId;
-        throw new UserNotFoundException(msg);
+        this.userRepository.delete(toDelete);
+        return userId;
     }
 
     @Override
@@ -94,20 +125,21 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+
+            
     @Override
     public Page<CustomUser> getAllUsers(
             Optional<Integer> pageLimit,
             Optional<Integer> pageOffset,
-            Optional<String> sortBy,
-            Optional<String> sortOrder) {
+            Optional<String> sortDirection,
+            Optional<String> sortBy) {
         Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
         Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-        String sortColumn = sortBy.orElseGet(() -> "userId");
-        String sortDirection = sortOrder.orElseGet(() -> "asc");
-        var pageRequest = PageRequest.of(offset, limit,
-                Direction.fromString(sortDirection), sortColumn);
+        Sort.Direction sortDirectionTmp = Sort.Direction.fromString(sortDirection.orElseGet(() -> DEFAULT_SORTING_DIRECTION));
+        var pageRequest = PageRequest.of(offset, limit, sortDirectionTmp, sortBy.orElseGet(() -> DEFAULT_USER_SORTING_COLUMN));
         return this.userRepository.findAll(pageRequest);
     }
+
 
     @Override
     public Page<CustomUser> getAllUsers() {

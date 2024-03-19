@@ -54,6 +54,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import net.bytebuddy.build.EntryPoint.Unvalidated;
 
+import static com.example.demo.service.DefaultValues.USER_ROLE;
+
+
 @Disabled
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -70,8 +73,8 @@ public class UserControllerTest {
 
     @BeforeEach
     private void setUp() {
-        user1 = new CustomUser(1L, "user1", "abc", "mail@comp.org", CustomUser.USER_ROLE, Collections.emptyList());
-        user1 = new CustomUser(2L, "user2", "abc", "mail@com.org", CustomUser.USER_ROLE, Collections.emptyList());
+        user1 = new CustomUser(1L, "user1", "abc", "mail@comp.org", USER_ROLE, Collections.emptyList());
+        user1 = new CustomUser(2L, "user2", "abc", "mail@com.org", USER_ROLE, Collections.emptyList());
         users.add(user1);
         users.add(user2);
 

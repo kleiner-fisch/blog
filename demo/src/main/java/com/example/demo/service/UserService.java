@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
 import com.example.demo.model.CustomUser;
+
+import jakarta.validation.constraints.Pattern;
 
 public interface UserService {
 
-
-    public static String DELETED_USER = "deleted user";
 
     public Long createUser(CustomUser user);
     public Long updateUser(Long userId, CustomUser user);
@@ -22,8 +24,8 @@ public interface UserService {
     public Long deleteUser(Long userId);
     public CustomUser getUser(Long userId);
     public Page<CustomUser> getAllUsers();
-    public Page<CustomUser> getAllUsers(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortBy,
-            Optional<String> sortOrder);
+    public Page<CustomUser> getAllUsers(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortDirection,
+            Optional<String> SortBy);
 
     public void addAllUsers(List<CustomUser> users);
 

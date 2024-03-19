@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.UniqueElements;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,30 +22,39 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
+import static com.example.demo.service.DefaultValues.ROLE_SEPERATOR;;
+
+
+
 @Entity
 @Table(name="User_Table")
+@Schema(description = "A user object that we use to authentificate users, and to track posts of users")
 public class CustomUser {
-
-    public static final String USER_ROLE = "USER";
-    public static final String ADMIN_ROLE = "ADMIN";
-    public static final String ROLE_SEPERATOR = ",";
 
 
     @Column(name="username", unique = true )
     @NotBlank(message = "username must not be null or only whitespace")
+    @Schema(description = "username that is used to login, and is used as that users name in posts", example = "barman") 
     private String username;
+
     @NotBlank(message = "password must not be empty")
     @Column(name="password", nullable = false)
     @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
+    @Schema(description = "password used for authentification", example = "12345", accessMode = AccessMode.WRITE_ONLY) 
     private String password;
+
     @Column(name="mail")
     @Email(message = "given email address is not wellformed")
+    @Schema(description = "mail account. Currently not used.", example = "barman@mail.org") 
     private String mail;
+
     @Id
     @Column(name="userID")
+    @Schema(description = "used as ID in the database, and also as parameter in URLs.", example = "1", accessMode = AccessMode.READ_ONLY) 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
+    @JsonProperty( value = "roles", access = JsonProperty.Access.WRITE_ONLY)
     @Column(name="roles")
     private String roles;
 

@@ -135,8 +135,13 @@ public class UserServiceImpl implements UserService{
             Optional<String> sortBy) {
         Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
         Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
+
         Sort.Direction sortDirectionTmp = Sort.Direction.fromString(sortDirection.orElseGet(() -> DEFAULT_SORTING_DIRECTION));
-        var pageRequest = PageRequest.of(offset, limit, sortDirectionTmp, sortBy.orElseGet(() -> DEFAULT_USER_SORTING_COLUMN));
+        Sort.Order sortOder = Sort.Order.by(DEFAULT_USER_SORTING_COLUMN).with(sortDirectionTmp).ignoreCase();
+        Sort sort = Sort.by(sortOder);
+        var pageRequest = PageRequest.of(offset, limit, sort);
+
+        // var pageRequest = PageRequest.of(offset, limit, sortDirectionTmp, sortBy.orElseGet(() -> DEFAULT_USER_SORTING_COLUMN));
         return this.userRepository.findAll(pageRequest);
     }
 

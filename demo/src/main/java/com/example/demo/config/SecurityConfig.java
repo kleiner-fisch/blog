@@ -58,10 +58,20 @@ private static final String[] AUTH_WHITELIST = {
 
     httpSecurity.authorizeHttpRequests(registry -> 
     {
-        registry.requestMatchers(HttpMethod.POST, "/users").permitAll();
+      // everybody can create users
+      registry.requestMatchers(HttpMethod.POST, "/users").permitAll();
+      // everybody can view everything
       registry.requestMatchers(HttpMethod.GET, "/users", "/users/**", "/posts", "/posts/**").permitAll();
-      registry.requestMatchers(HttpMethod.POST, "/posts", "/posts/**").hasAnyRole(ADMIN_ROLE, USER_ROLE);
+      // everybody can post comments
+      registry.requestMatchers(HttpMethod.POST, "/posts/[0-9]+/comments").permitAll();
+      // users and admins can create posts
+      registry.requestMatchers(HttpMethod.POST, "/posts").hasAnyRole(ADMIN_ROLE, USER_ROLE);
       registry.requestMatchers(HttpMethod.GET, "/admin").hasRole(ADMIN_ROLE);
+      // users and admins can delete users
+      registry.requestMatchers(HttpMethod.DELETE, "/users/[0-9]+").hasAnyRole(ADMIN_ROLE, USER_ROLE);
+      // As comments currently have arbitrary authors, only admins can remove them
+      registry.requestMatchers(HttpMethod.DELETE, "/posts/[0-9]+/comments/*").hasRole(ADMIN_ROLE);
+      registry.requestMatchers(HttpMethod.DELETE, "/posts/[0-9]+").hasAnyRole(ADMIN_ROLE, USER_ROLE);
       registry.requestMatchers( AUTH_WHITELIST).hasAnyRole(ADMIN_ROLE, USER_ROLE);
     });
 

@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.Util;
 import com.example.demo.exception.PostNotFoundException;
+import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostService;
+import com.example.demo.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -23,14 +25,19 @@ public class PostServiceImpl implements PostService {
     public static final Integer DEFAULT_PAGE_OFFSET = 0;
 
     private PostRepository postRepository;
+        private UserService userService;
 
-    public PostServiceImpl(PostRepository postRepository) {
+
+    public PostServiceImpl(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
     @Override
     public Long createPost(Post post) {
         post.setDate(LocalDateTime.now());
+        CustomUser customUser = userService.getUser(post.getAuthor().getUserId());
+        customUser.getPosts().add(post);
         this.postRepository.save(post);
         return post.getPostId();
     }

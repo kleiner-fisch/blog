@@ -83,15 +83,15 @@ public class UserController {
         // return this.userService.updateUser(userId, user);
     } */
 
-    
+    @Operation(description = "Returns a single user.")
     @GetMapping("/{userId}")
-    public CustomUser getUser(@PathVariable("userId") Long userId){
+    public CustomUser getUser(
+        @Schema(description = "id of the user to be fetched", type = "long")
+                @PathVariable("userId") Long userId){
         return this.userService.getUser(userId);
     }
 
 
-
-    // TODO the default value does not seem interpreted by openapi correctly...
     @Operation(description = "Returns a page of all users.")
     @GetMapping()
     public Page<CustomUser> getAllUsers(
@@ -107,17 +107,18 @@ public class UserController {
                     String sortDirection,
             @Schema(description = "the property used to sort the users", required = false, type = "string", allowableValues = { "userId", "username", "mail"}, defaultValue = DEFAULT_USER_SORTING_COLUMN )
                     @RequestParam(name = "sortBy", defaultValue = DEFAULT_USER_SORTING_COLUMN, required = false)  
-                    @Pattern(regexp = "userId|username|mail") String sortBy){
-        // TODO with hte default value in the RequestParam annotation, do I need the optional?? 
-        
+                    @Pattern(regexp = "userId|username|mail") String sortBy){        
         return this.userService.getAllUsers(Optional.ofNullable(pageLimit), 
                     Optional.ofNullable(pageOffset), Optional.ofNullable(sortDirection), Optional.ofNullable(sortBy));
     }
 
     @Operation(description = "Deletes the user with the given userId. May only be done by admins and the user to be removed itself. " + 
-        "When a user is deleted all posts of the user are transferred to a special user")
+        "When a user is deleted, the users posts are not deleted. Instead, all posts of the user are transferred to a special user")
     @DeleteMapping("/{userId}")
-    public Long deleteUser(@PathVariable("userId") Long userId){
+    public Long deleteUser(
+        @Schema(description = "id of the user to be deleted", type = "long")
+                @PathVariable("userId") Long userId){
+        // TODO does user dleetion work??
         return this.userService.deleteUser(userId);
     }
 }

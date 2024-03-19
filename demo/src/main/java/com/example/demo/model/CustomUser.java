@@ -37,6 +37,9 @@ public class CustomUser {
     @Schema(description = "username that is used to login, and is used as that users name in posts", example = "barman") 
     private String username;
 
+    /**
+     * The password should not be transferred to the client, but it should be transferred from client to server
+     */
     @NotBlank(message = "password must not be empty")
     @Column(name="password", nullable = false)
     @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
@@ -48,13 +51,22 @@ public class CustomUser {
     @Schema(description = "mail account. Currently not used.", example = "barman@mail.org") 
     private String mail;
 
+
+    /**
+     * The id should not be read only. It should not be transferred within user objects
+     */
     @Id
     @Column(name="userID")
     @Schema(description = "used as ID in the database, and also as parameter in URLs.", example = "1", accessMode = AccessMode.READ_ONLY) 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
+    /**
+     * The roles should not be returned to the client, and should not be provided when creating new users. 
+     */
     @JsonProperty( value = "roles", access = JsonProperty.Access.WRITE_ONLY)
+    @Schema(description = "used to check whether a user is authorized to perform actions") 
+    @JsonIgnore
     @Column(name="roles")
     private String roles;
 

@@ -109,8 +109,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean userExists(String username){
-        var user = Optional.ofNullable(this.userRepository.findByUsername(username));
-        return user.isPresent();
+        return this.userRepository.findByUsername(username).isPresent();
     }
     
 

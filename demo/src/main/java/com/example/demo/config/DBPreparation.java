@@ -35,7 +35,7 @@ public class DBPreparation implements CommandLineRunner{
     private void addDeleteUser() {
         if(!userService.userExists(DELETED_USER)){
             CustomUser deleteUser = new CustomUser();
-            deleteUser.setMail("deleted");
+            deleteUser.setMail("deleted@mail.org");
             deleteUser.setPassword("pw");
             deleteUser.setRoles(USER_ROLE);
             deleteUser.setPosts(Collections.emptyList());

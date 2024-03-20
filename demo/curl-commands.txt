@@ -1,7 +1,15 @@
+
+### get all users
 curl -X 'GET'   'http://localhost:8080/users?pageLimit=20&pageOffset=0&sortDirection=DESC&sortBy=useRid'
 
-curl -X 'POST' -d '{"content":"foo", "title":"title", "author":"{"userId":110}}'   'http://localhost:8080/posts' -H "Content-Type: application/json"
-
+### Create a post
 curl -X 'POST' -i -u user2:pw -d '{"content":"foo", "title":"title", "author":{"userId":110}}'   'http://localhost:8080/posts' -H "Content-Type: application/json"
 
+### Create a comment
+curl -X 'POST' -i -d '{"content":"comment content", "author":"comment author"}'   'http://localhost:8080/posts/77863' -H "Content-Type: application/json"
+
+### Get a post
 curl -X 'GET'   'http://localhost:8080/posts/77863'
+
+### Delete a post
+curl -X 'DELETE'  -u user2:pw -i   'http://localhost:8080/posts/77864' -H "Content-Type: application/json"

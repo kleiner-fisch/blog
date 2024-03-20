@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService{
         User  currentUser = (User) auth.getPrincipal();
         CustomUser toDeleteUser = this.getUser(toDeleteID);
         if(!currentSessionMayModify(toDeleteUser.getUsername())){
-            throw new NotAuthorizedException("User with username " + currentUser.getUsername() + "is not authorized to delete user with ID " + toDeleteID);
+            throw new NotAuthorizedException("User with username " + currentUser.getUsername() + " is not authorized to delete user with ID " + toDeleteID);
         }
         if(toDeleteUser.getUsername().equals(DELETED_USER)){
             throw new NotAuthorizedException("user with username " + DELETED_USER + " cannot be deleted" );

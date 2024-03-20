@@ -1,24 +1,15 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import static com.example.demo.service.DefaultValues.DEFAULT_SORTING_DIRECTION;
-import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_LIMIT;
-import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_OFFSET;
 import static com.example.demo.service.DefaultValues.USER_ROLE;
 import static com.example.demo.service.DefaultValues.DEFAULT_USER_SORTING_COLUMN;
 
@@ -36,7 +25,7 @@ import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_OFFSET_STRING;
 
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.model.CustomUser;
+import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -75,7 +64,8 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "Successfull request."), 
         @ApiResponse(responseCode = "400", description = "The user data is invalid. Either, a value is malformed (such as not a valid mail), or the username is already in use.")})
     public Long createUser(
-        @Parameter(description = "username, password and mail must be set and username must not already be used") @Valid @RequestBody CustomUser user){
+        @Parameter(description = "username, password and mail must be set and username must not already be used") 
+            @Valid @RequestBody UserDTO user){
         user.setRoles(USER_ROLE);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return this.userService.createUser(user);
@@ -99,10 +89,10 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Resource not found",
                     content = { @Content(schema = @Schema(implementation = UserNotFoundException.class))} )
     })
-    public CustomUser getUser(
+    public UserDTO getUser(
         @Schema(description = "id of the user to be fetched", type = "long")
                 @PathVariable("userId") Long userId){
-        return this.userService.getUser(userId);
+        return this.userService.getUserDTO(userId);
     }
 
 
@@ -111,7 +101,7 @@ public class UserController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
         @ApiResponse(responseCode = "200", description = "Successfull request")})
-    public Page<CustomUser> getAllUsers(
+    public Page<UserDTO> getAllUsers(
             @Schema(description = "number of users per page", required = false, type = "int", defaultValue = DEFAULT_PAGE_LIMIT_STRING)
                     @RequestParam(name = "pageLimit", defaultValue = "10", required = false) 
                     @PositiveOrZero() Integer pageLimit, 

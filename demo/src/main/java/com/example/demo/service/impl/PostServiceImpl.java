@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Long createPost(Post post) {
         post.setDate(LocalDateTime.now());
-        CustomUser customUser = userService.getUser(post.getAuthor().getUserId());
+        CustomUser customUser = userService.getUserEntity(post.getAuthor().getUserId());
         customUser.getPosts().add(post);
         this.postRepository.save(post);
         return post.getPostId();

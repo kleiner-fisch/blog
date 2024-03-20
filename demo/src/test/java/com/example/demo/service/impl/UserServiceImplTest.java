@@ -41,6 +41,7 @@ import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Post;
 import com.example.demo.model.CustomUser;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
 
 import static com.example.demo.service.DefaultValues.DELETED_USER;;
@@ -102,14 +103,14 @@ public class UserServiceImplTest {
         }).when(userRepository).save(testUserWithoutId);
         when(userRepository.save(testUserWithoutId)).thenReturn(testUserWithoutId);
 
-        assertThat(userService.createUser(testUserWithoutId)).isEqualTo(testUserWithoutId.getUserId());
+        assertThat(userService.createUser(new UserDTO(testUserWithoutId))).isEqualTo(testUserWithoutId.getUserId());
     }
 
 
     @Test
     void testGetUser_Found() {
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUserWithId1));
-        assertThat(userService.getUser(userId)).isEqualTo(testUserWithId1);
+        assertThat(userService.getUserEntity(userId)).isEqualTo(testUserWithId1);
     }
 
     @Test
@@ -117,7 +118,7 @@ public class UserServiceImplTest {
         when(userRepository.findById(userId + 1)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, 
-            () -> userService.getUser(userId +1));      
+            () -> userService.getUserEntity(userId +1));      
 
     }
 

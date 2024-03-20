@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
@@ -13,6 +14,7 @@ import static com.example.demo.service.DefaultValues.USER_ROLE;
 
 
 import com.example.demo.model.CustomUser;
+import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
 
 @DependsOnDatabaseInitialization
@@ -34,7 +36,7 @@ public class DBPreparation implements CommandLineRunner{
 
     private void addDeleteUser() {
         if(!userService.userExists(DELETED_USER)){
-            CustomUser deleteUser = new CustomUser();
+            UserDTO deleteUser = new UserDTO();
             deleteUser.setMail("deleted@mail.org");
             deleteUser.setPassword("pw");
             deleteUser.setRoles(USER_ROLE);

@@ -18,6 +18,7 @@ import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -41,11 +42,10 @@ public class UserServiceImpl implements UserService{
         this.userRepository = userRepository;
     }
 
-
-    // TODO does not check whether username already exists and exposes internal error to client
     @Override
-    public Long createUser(CustomUser user) {
-        this.userRepository.save(user);
+    public Long createUser(UserDTO user) {
+        CustomUser userEntity = new CustomUser(user);
+        this.userRepository.save(userEntity);
         return user.getUserId();
     }
 
@@ -58,12 +58,12 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public Long updateUser(Long userId, CustomUser user) {
+    public Long updateUser(Long userId, UserDTO user) {
         try {
             CustomUser storedUser = this.userRepository.getReferenceById(userId);
-            Util.updateValue(storedUser::setMail, storedUser.getMail());
-            Util.updateValue(storedUser::setUsername, storedUser.getUsername());
-            Util.updateValue(storedUser::setPassword, storedUser.getPassword());
+            Util.updateValue(storedUser::setMail, user.getMail());
+            Util.updateValue(storedUser::setUsername, user.getUsername());
+            Util.updateValue(storedUser::setPassword, user.getPassword());
             this.userRepository.save(storedUser);
             return storedUser.getUserId();
         } catch (EntityNotFoundException e) {
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService{
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User  currentUser = (User) auth.getPrincipal();
-        CustomUser toDeleteUser = this.getUser(toDeleteID);
+        CustomUser toDeleteUser = this.getUserEntity(toDeleteID);
         if(!currentSessionMayModify(toDeleteUser.getUsername())){
             throw new NotAuthorizedException("User with username " + currentUser.getUsername() + " is not authorized to delete user with ID " + toDeleteID);
         }
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Long deleteUser(Long userId) {
         validateDeleteRequest(userId);
-        CustomUser toDelete = this.getUser(userId);
+        CustomUser toDelete = this.getUserEntity(userId);
         // ensure we don't delete the special delete user
         CustomUser specialUser = this.userRepository.findByUsername(DELETED_USER).get();
         var iterator = toDelete.getPosts().iterator();
@@ -112,9 +112,8 @@ public class UserServiceImpl implements UserService{
         return this.userRepository.findByUsername(username).isPresent();
     }
     
-
     @Override
-    public CustomUser getUser(Long userId) {
+    public CustomUser getUserEntity(Long userId) {
         var user = this.userRepository.findById(userId);
         if (user.isPresent()){
             return user.get();
@@ -124,10 +123,21 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    public UserDTO getUserDTO(Long userId) {
+        var user = this.userRepository.findById(userId);
+        if (user.isPresent()){
+            return new UserDTO(user.get());
+        }else {
+            String msg = "Requested user not found. Given userID: " + userId;
+            throw new UserNotFoundException(msg);
+        }
+    }
+
 
             
     @Override
-    public Page<CustomUser> getAllUsers(
+    public Page<UserDTO> getAllUsers(
             Optional<Integer> pageLimit,
             Optional<Integer> pageOffset,
             Optional<String> sortDirection,
@@ -140,19 +150,20 @@ public class UserServiceImpl implements UserService{
         Sort sort = Sort.by(sortOder);
         var pageRequest = PageRequest.of(offset, limit, sort);
 
-        // var pageRequest = PageRequest.of(offset, limit, sortDirectionTmp, sortBy.orElseGet(() -> DEFAULT_USER_SORTING_COLUMN));
-        return this.userRepository.findAll(pageRequest);
+        Page<CustomUser> users = this.userRepository.findAll(pageRequest);
+        return users.map(user -> new UserDTO(user));
     }
 
 
     @Override
-    public Page<CustomUser> getAllUsers() {
+    public Page<UserDTO> getAllUsers() {
         return this.getAllUsers(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
 
     @Override
     public void addAllUsers(List<CustomUser> users) {
+        // this.userRepository.saveAll(users.stream().map(user -> new CustomUser(user)).toList());
         this.userRepository.saveAll(users);
     }
     

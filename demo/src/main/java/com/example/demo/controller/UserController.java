@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.service.UserDTO;
+import com.example.demo.service.validation.AllowSortFields;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -89,6 +90,7 @@ public interface UserController {
         @ApiResponse(responseCode = "200", description = "Successfull request") })
     @GetMapping("/test")
     public Page<UserDTO> getAllUsers2(
+            @AllowSortFields(value = {"username", "userId"})
             @ParameterObject @PageableDefault(sort = {"username"} ) Pageable pageable);
 
     // 

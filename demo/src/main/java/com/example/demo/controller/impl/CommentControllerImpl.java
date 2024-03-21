@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.impl;
 
 import java.util.Optional;
 
@@ -18,12 +18,12 @@ import com.example.demo.service.CommentService;
 
 @RestController
 @RequestMapping("/posts/{postId}/comments")
-public class CommentController {
+public class CommentControllerImpl {
 
 
     private CommentService commentService;
 
-    public CommentController(CommentService commentService) {
+    public CommentControllerImpl(CommentService commentService) {
         this.commentService = commentService;
     }
 

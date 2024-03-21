@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
@@ -95,24 +96,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> getAllPosts(
-            Optional<Integer> pageLimit,
-            Optional<Integer> pageOffset,
-            Optional<String> sortBy,
-            Optional<String> sortOrder) {
-        Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
-        Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-        String sortColumn = sortBy.orElseGet(() -> "postId");
-        String sortDirection = sortOrder.orElseGet(() -> "asc");
-        var pageRequest = PageRequest.of(offset, limit,
-                Direction.fromString(sortDirection), sortColumn);
-        return this.postRepository.findAll(pageRequest);
+    public Page<Post> getAllPosts(Pageable pageable) {
+        return this.postRepository.findAll(pageable);
     }
 
-    @Override
-    public Page<Post> getAllPosts() {
-        return this.getAllPosts(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
-    }
+
+    // @Override
+    // public Page<Post> getAllPosts(
+    //         Optional<Integer> pageLimit,
+    //         Optional<Integer> pageOffset,
+    //         Optional<String> sortBy,
+    //         Optional<String> sortOrder) {
+    //     Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
+    //     Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
+    //     String sortColumn = sortBy.orElseGet(() -> "postId");
+    //     String sortDirection = sortOrder.orElseGet(() -> "asc");
+    //     var pageRequest = PageRequest.of(offset, limit,
+    //             Direction.fromString(sortDirection), sortColumn);
+    //     return this.postRepository.findAll(pageRequest);
+    // }
+
+    // @Override
+    // public Page<Post> getAllPosts() {
+    //     return this.getAllPosts(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    // }
 
     @Override
     public void addAllPosts(List<Post> users) {

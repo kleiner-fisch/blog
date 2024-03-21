@@ -46,7 +46,7 @@ public interface UserController {
             @ApiResponse(responseCode = "200", description = "Successfull request."),
             @ApiResponse(responseCode = "400", description = "The user data is invalid. Either, a value is malformed (such as not a valid mail), or the username is already in use.") })
     public Long createUser(
-            @Schema(description = "username, password and mail must be set and username must not already be used") 
+            @Parameter(description = "username, password and mail must be set and username must not already be used") 
                 @Valid @RequestBody 
                 UserDTO user);
 
@@ -61,37 +61,39 @@ public interface UserController {
                     @Content(schema = @Schema(implementation = UserNotFoundException.class)) })
     })
     public UserDTO getUser(
-            @Schema(description = "id of the user to be fetched", type = "long") @PathVariable("userId") Long userId);
+        @Parameter(description = "id of the user to fetch") 
+            @PathVariable("userId") Long userId);
     
     //
     // GET ALL USERS
     //
-    @Operation(description = "Returns a page of all users.")
-    @GetMapping()
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
-            @ApiResponse(responseCode = "200", description = "Successfull request") })
-    public Page<UserDTO> getAllUsers(
-            @Schema(description = "number of users per page", required = false, type = "int", defaultValue = DEFAULT_PAGE_LIMIT_STRING) @RequestParam(name = "pageSize", defaultValue = "10", required = false) @PositiveOrZero() Integer pageSize,
-            @Schema(description = "the page to fetch", required = false, type = "int", defaultValue = DEFAULT_PAGE_OFFSET_STRING) @RequestParam(name = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
-            @Schema(description = "the direction of the users should be sorted", required = false, type = "string", allowableValues = {
-                    "asc",
-                    "desc" }, defaultValue = DEFAULT_SORTING_DIRECTION) @RequestParam(name = "sortDirection", defaultValue = "asc", required = false) @Pattern(regexp = "asc|desc", flags = {
-                            Pattern.Flag.CASE_INSENSITIVE }) String sortDirection,
-            @Schema(description = "the property used to sort the users", required = false, type = "string", allowableValues = {
-                    "userId", "username",
-                    "mail" }, defaultValue = DEFAULT_USER_SORTING_COLUMN) @RequestParam(name = "sortBy", defaultValue = DEFAULT_USER_SORTING_COLUMN, required = false) @Pattern(regexp = "userId|username|mail", flags = {
-                            Pattern.Flag.CASE_INSENSITIVE }) String sortBy);
+    // @Operation(description = "Returns a page of all users.")
+    // @GetMapping()
+    // @ApiResponses(value = {
+    //         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
+    //         @ApiResponse(responseCode = "200", description = "Successfull request") })
+    // public Page<UserDTO> getAllUsers(
+    //         @Schema(description = "number of users per page", required = false, type = "int", defaultValue = DEFAULT_PAGE_LIMIT_STRING) @RequestParam(name = "pageSize", defaultValue = "10", required = false) @PositiveOrZero() Integer pageSize,
+    //         @Schema(description = "the page to fetch", required = false, type = "int", defaultValue = DEFAULT_PAGE_OFFSET_STRING) @RequestParam(name = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
+    //         @Schema(description = "the direction of the users should be sorted", required = false, type = "string", allowableValues = {
+    //                 "asc",
+    //                 "desc" }, defaultValue = DEFAULT_SORTING_DIRECTION) @RequestParam(name = "sortDirection", defaultValue = "asc", required = false) @Pattern(regexp = "asc|desc", flags = {
+    //                         Pattern.Flag.CASE_INSENSITIVE }) String sortDirection,
+    //         @Schema(description = "the property used to sort the users", required = false, type = "string", allowableValues = {
+    //                 "userId", "username",
+    //                 "mail" }, defaultValue = DEFAULT_USER_SORTING_COLUMN) @RequestParam(name = "sortBy", defaultValue = DEFAULT_USER_SORTING_COLUMN, required = false) @Pattern(regexp = "userId|username|mail", flags = {
+    //                         Pattern.Flag.CASE_INSENSITIVE }) String sortBy);
 
     // TEST METHOD
     @Operation(description = "Returns a page of all users.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
-    @GetMapping("/test")
-    public Page<UserDTO> getAllUsers2(
-            @AllowSortFields(value = {"username", "userId"})
-            @ParameterObject @PageableDefault(sort = {"username"} ) Pageable pageable);
+    @GetMapping()
+    public Page<UserDTO> getAllUsers(
+        @AllowSortFields(value = {"username", "userId"})
+            @ParameterObject @PageableDefault(sort = {"username"} ) 
+            Pageable pageable);
 
     // 
     // DELETE USER
@@ -107,5 +109,6 @@ public interface UserController {
                     @Content(schema = @Schema(implementation = NotAuthorizedException.class)) }),
             @ApiResponse(responseCode = "401", description = "Authentification failure") })
     public Long deleteUser(
-            @Schema(description = "id of the user to be deleted", type = "long") @PathVariable("userId") Long userId);
+        @Parameter(description = "id of the user to be deleted") 
+            @PathVariable("userId") Long userId);
 }

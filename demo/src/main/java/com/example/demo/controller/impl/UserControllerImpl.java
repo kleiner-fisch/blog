@@ -82,20 +82,20 @@ public class UserControllerImpl implements UserController{
     }
     
     @Override
-    public Page<UserDTO> getAllUsers2(Pageable pageable){
+    public Page<UserDTO> getAllUsers(Pageable pageable){
         return userService.getAllUsers(pageable);
       }
       
    
-    @Override
-    public Page<UserDTO> getAllUsers(Integer pageSize, Integer page, 
-            String sortDirection, String sortBy) {
-        Page<UserDTO> users = this.userService.getAllUsers(Optional.ofNullable(pageSize),
-                Optional.ofNullable(page), Optional.ofNullable(sortDirection), Optional.ofNullable(sortBy));
-        // we do not want the posts when listing many users
-        users.forEach(user -> user.setPosts(null));
-        return users;
-    }
+    // @Override
+    // public Page<UserDTO> getAllUsers(Integer pageSize, Integer page, 
+    //         String sortDirection, String sortBy) {
+    //     Page<UserDTO> users = this.userService.getAllUsers(Optional.ofNullable(pageSize),
+    //             Optional.ofNullable(page), Optional.ofNullable(sortDirection), Optional.ofNullable(sortBy));
+    //     // we do not want the posts when listing many users
+    //     users.forEach(user -> user.setPosts(null));
+    //     return users;
+    // }
 
     @Override
     public Long deleteUser(Long userId) {

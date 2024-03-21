@@ -2,6 +2,8 @@
 ### get all users
 curl -X 'GET'   'http://localhost:8080/users?pageLimit=20&pageOffset=0&sortDirection=DESC&sortBy=useRid'
 
+curl -X 'GET' 'http://localhost:8080/users/test?page=0&size=2&sort=userId,asc' -H 'accept: */*'
+
 ### Create a post
 curl -X 'POST' -i -u user2:pw -d '{"content":"foo", "title":"title", "author":{"userId":110}}'   'http://localhost:8080/posts' -H "Content-Type: application/json"
 

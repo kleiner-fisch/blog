@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.example.demo.model.CustomUser;
@@ -33,6 +34,8 @@ public interface UserService {
     public Page<UserDTO> getAllUsers();
     public Page<UserDTO> getAllUsers(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortDirection,
             Optional<String> SortBy);
+
+    public Page<UserDTO> getAllUsers(Pageable pageable);
 
     public void addAllUsers(List<CustomUser> users);
 

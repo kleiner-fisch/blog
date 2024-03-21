@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,8 +54,8 @@ public class UserControllerImpl implements UserController{
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
-
-
+        
+    @Override
     public Long createUser(UserDTO user) {
         user.setRoles(USER_ROLE);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -75,34 +76,20 @@ public class UserControllerImpl implements UserController{
      * }
      */
 
-    @Operation(description = "Returns a single user.")
-    @GetMapping("/{userId}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfull request"),
-            @ApiResponse(responseCode = "404", description = "Resource not found", content = {
-                    @Content(schema = @Schema(implementation = UserNotFoundException.class)) })
-    })
-    public UserDTO getUser(
-            @Schema(description = "id of the user to be fetched", type = "long") @PathVariable("userId") Long userId) {
+    @Override
+    public UserDTO getUser(Long userId) {
         return this.userService.getUserDTO(userId);
     }
-
-    @Operation(description = "Returns a page of all users.")
-    @GetMapping()
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
-            @ApiResponse(responseCode = "200", description = "Successfull request") })
-    public Page<UserDTO> getAllUsers(
-            @Schema(description = "number of users per page", required = false, type = "int", defaultValue = DEFAULT_PAGE_LIMIT_STRING) @RequestParam(name = "pageSize", defaultValue = "10", required = false) @PositiveOrZero() Integer pageSize,
-            @Schema(description = "the page to fetch", required = false, type = "int", defaultValue = DEFAULT_PAGE_OFFSET_STRING) @RequestParam(name = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
-            @Schema(description = "the direction of the users should be sorted", required = false, type = "string", allowableValues = {
-                    "asc",
-                    "desc" }, defaultValue = DEFAULT_SORTING_DIRECTION) @RequestParam(name = "sortDirection", defaultValue = "asc", required = false) @Pattern(regexp = "asc|desc", flags = {
-                            Pattern.Flag.CASE_INSENSITIVE }) String sortDirection,
-            @Schema(description = "the property used to sort the users", required = false, type = "string", allowableValues = {
-                    "userId", "username",
-                    "mail" }, defaultValue = DEFAULT_USER_SORTING_COLUMN) @RequestParam(name = "sortBy", defaultValue = DEFAULT_USER_SORTING_COLUMN, required = false) @Pattern(regexp = "userId|username|mail", flags = {
-                            Pattern.Flag.CASE_INSENSITIVE }) String sortBy) {
+    
+    @Override
+    public Page<UserDTO> getAllUsers2(Pageable pageable){
+        return userService.getAllUsers(pageable);
+      }
+      
+   
+    @Override
+    public Page<UserDTO> getAllUsers(Integer pageSize, Integer page, 
+            String sortDirection, String sortBy) {
         Page<UserDTO> users = this.userService.getAllUsers(Optional.ofNullable(pageSize),
                 Optional.ofNullable(page), Optional.ofNullable(sortDirection), Optional.ofNullable(sortBy));
         // we do not want the posts when listing many users
@@ -110,19 +97,8 @@ public class UserControllerImpl implements UserController{
         return users;
     }
 
-    @Operation(description = "Deletes the user with the given userId. May only be done by admins and the user to be removed itself. "
-            +
-            "When a user is deleted, the users posts are not deleted. Instead, all posts of the user are transferred to a special user")
-    @DeleteMapping("/{userId}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfull request"),
-            @ApiResponse(responseCode = "404", description = "user to delete not found", content = {
-                    @Content(schema = @Schema(implementation = UserNotFoundException.class)) }),
-            @ApiResponse(responseCode = "403", description = "not authorized to delete the given user", content = {
-                    @Content(schema = @Schema(implementation = NotAuthorizedException.class)) }),
-            @ApiResponse(responseCode = "401", description = "Authentification failure") })
-    public Long deleteUser(
-            @Schema(description = "id of the user to be deleted", type = "long") @PathVariable("userId") Long userId) {
+    @Override
+    public Long deleteUser(Long userId) {
         return this.userService.deleteUser(userId);
     }
 }

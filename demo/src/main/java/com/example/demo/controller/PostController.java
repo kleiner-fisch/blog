@@ -23,21 +23,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RequestMapping("/posts")
+@Tag(name = "Post_Endpoints", description = "Methods to interact with posts")
 public interface PostController {
 
     //
     // CREATE NEW POST
     //
     @Operation(description = "creates a new post")
+    @PostMapping()
     @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Authentification failure"),
         @ApiResponse(responseCode = "400", description = "Error in the provided post data"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
-    @PostMapping()
     public Long createPost(
+        // TODO create Post endpoint currently  listed under post-entity-controller (which we dont want)
         @Parameter(description = "the post to create. No null values allowed", example = "{'content':'Post content', 'title':'Post title'}" ) 
             @Valid @RequestBody Post post);
 

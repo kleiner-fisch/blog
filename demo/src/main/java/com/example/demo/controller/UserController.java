@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -35,6 +36,7 @@ import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_LIMIT_STRING;
 import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_OFFSET_STRING;
 
 @RequestMapping("/users")
+@Tag(name = "User_Endpoints", description = "Methods to interact with users")
 public interface UserController {
 
     //

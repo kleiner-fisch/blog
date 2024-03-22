@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.util.Optional;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,14 +9,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.model.Comment;
-import com.example.demo.service.CommentService;
 import com.example.demo.service.validation.AllowSortFields;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,7 +72,7 @@ public interface CommentController {
         @ApiResponse(responseCode = "200", description = "Successfull request") })
     public Page<Comment> getAllComments(
         @Parameter(description = "id of the post whose comments to fetch")
-            @PathVariable("postId") Long commentId,
+            @PathVariable("postId") Long postId,
         @Parameter(description = "page data of the posts to fetch")
             @AllowSortFields(value = {"date", "author"})
             @ParameterObject @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable);

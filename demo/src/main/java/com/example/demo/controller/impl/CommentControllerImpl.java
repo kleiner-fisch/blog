@@ -43,20 +43,14 @@ public class CommentControllerImpl implements CommentController{
     }
 
 
-    public Page<Comment> getAllComments(Pageable pageable) {
-        return this.commentService.getAllComments(pageable);
-    }
-
-
-
     public Long deleteComment(Long postId, Long commentId){
         return this.commentService.deleteComment(commentId);
     }
 
     @Override
-    public Page<Comment> getAllComments(Long commentId, Pageable pageable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllComments'");
+    public Page<Comment> getAllComments(Long postID, Pageable pageable) {
+        return this.commentService.findAllCommentsForPost(postID, pageable);
+
     }
 
 }

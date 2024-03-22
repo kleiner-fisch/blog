@@ -91,15 +91,14 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    @Override
-    public Page<Comment> getAllComments(Pageable pageable) {
-        return this.commentRepository.findAll(pageable);
-    }
 
     @Override
-    public void addAllComments(List<Comment> comments) {
-        this.commentRepository.saveAll(comments);
+    public Page<Comment> findAllCommentsForPost(Long postID, Pageable pageRequest){
+        Post post = new Post();
+        post.setPostId(postID);
+        return this.commentRepository.findAllByPost(post, pageRequest);
     }
+
 
     @Override
     public void deleteAllComments(){

@@ -133,10 +133,7 @@ public class UserServiceImplTest {
         Page<CustomUser> result = new PageImpl(Lists.list(testUserWithId2, testUserWithId1));
         when(userRepository.findAll(pageRequest)).thenReturn(result);
 
-        assertThat(userService.getAllUsers(Optional.of(pageSize), 
-                    Optional.of(pageNumber), 
-                    Optional.of(sortBy), 
-                    Optional.of(sortDirection))).isEqualTo(result);
+        assertThat(userService.getAllUsers(pageRequest)).isEqualTo(result);
 
     }
 

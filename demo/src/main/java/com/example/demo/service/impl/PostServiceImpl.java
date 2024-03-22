@@ -100,6 +100,12 @@ public class PostServiceImpl implements PostService {
         return this.postRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Post> findAllPostsByUser(Long userID, Pageable pageable) {
+        CustomUser author = new CustomUser();
+        author.setUserId(userID);
+        return this.postRepository.findAllByAuthor(author, pageable);
+    }
 
     // @Override
     // public Page<Post> getAllPosts(

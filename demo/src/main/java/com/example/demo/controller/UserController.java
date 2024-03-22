@@ -84,7 +84,9 @@ public interface UserController {
     //                 "mail" }, defaultValue = DEFAULT_USER_SORTING_COLUMN) @RequestParam(name = "sortBy", defaultValue = DEFAULT_USER_SORTING_COLUMN, required = false) @Pattern(regexp = "userId|username|mail", flags = {
     //                         Pattern.Flag.CASE_INSENSITIVE }) String sortBy);
 
-    // TEST METHOD
+    //
+    // GET ALL USERS
+    //
     @Operation(description = "Returns a page of all users.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),

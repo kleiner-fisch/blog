@@ -32,8 +32,8 @@ public interface UserService {
 
     public UserDTO getUserDTO(Long userId);
     public Page<UserDTO> getAllUsers();
-    public Page<UserDTO> getAllUsers(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortDirection,
-            Optional<String> SortBy);
+    // public Page<UserDTO> getAllUsers(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortDirection,
+    //         Optional<String> SortBy);
 
     public Page<UserDTO> getAllUsers(Pageable pageable);
 

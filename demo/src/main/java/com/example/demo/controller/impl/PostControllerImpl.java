@@ -35,7 +35,6 @@ public class PostControllerImpl implements PostController {
 
     @Override
     public Page<PostDTO> getUserPosts(Long userId, Pageable pageable) {
-        // TODO do we need PostDTO??
         return postService.findAllPostsByUser(userId, pageable);
         // UserDTO user =  this.userService.getUserDTO(userId);
         // return new PageImpl<>(user.getPosts(), pageable, user.getPosts().size());

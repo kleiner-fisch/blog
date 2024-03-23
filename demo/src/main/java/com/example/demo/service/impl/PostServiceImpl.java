@@ -89,7 +89,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDTO> getAllPosts(Pageable pageable) {
-        return this.postRepository.findAll(pageable).map(post -> new PostDTO(post));
+        Page<Post> posts = this.postRepository.findAll(pageable);
+        Page<PostDTO> result = posts.map(post -> new PostDTO(post));
+        return result;
     }
 
     @Override

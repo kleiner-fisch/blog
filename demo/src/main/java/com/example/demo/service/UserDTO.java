@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.example.demo.model.CustomUser;
@@ -9,13 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -39,16 +31,17 @@ public class UserDTO {
     /**
      * The id should not be read only. It should not be transferred within user objects
      */
-    @JsonProperty( value = "password", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty( value = "userId", access = JsonProperty.Access.READ_ONLY)
     private Long userId;
 
     /**
      * The roles should not be returned to the client, and should not be provided when creating new users. 
      */
-    @JsonProperty( value = "roles", access = JsonProperty.Access.WRITE_ONLY)
+    // @JsonProperty( value = "roles", access = JsonProperty.Access.WRITE_ONLY)
     @JsonIgnore
     private String roles;
 
+    // @JsonProperty( value = "posts", access = JsonProperty.Access.READ_ONLY)
     @JsonIgnore
     private List<Post> posts;
 

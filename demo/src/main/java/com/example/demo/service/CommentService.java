@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 import com.example.demo.model.Comment;
 
 public interface CommentService {
-    public Long createComment(Comment comment, Long postId);
-    public Long updateComment(Long commentId, Comment comment);
+    public Long createComment(CommentDTO comment, Long postId);
+    // public Long updateComment(Long commentId, Comment comment);
     public Long deleteComment(Long commentId);
-    public Comment getComment(Long commentId);
+    public CommentDTO getComment(Long commentId);
 
-    public Page<Comment> findAllCommentsForPost(Long postID, Pageable pageRequest);
+    public Page<CommentDTO> findAllCommentsForPost(Long postID, Pageable pageRequest);
 
     public void deleteAllComments();
         

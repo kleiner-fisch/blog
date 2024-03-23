@@ -3,27 +3,12 @@ package com.example.demo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hibernate.annotations.Cascade;
-
 import com.example.demo.model.Comment;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 
@@ -37,13 +22,21 @@ public class PostDTO {
     @NotNull(message = "content must not be null")
     private String content;
 
-    @JsonProperty( value = "author", access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
+    // @JsonProperty( value = "author", access = JsonProperty.Access.READ_ONLY)
     private CustomUser author;
+
+    @JsonProperty( value = "authorUsername", access = JsonProperty.Access.READ_ONLY)
+    private String authorUsername;
+
+
+
 
     @JsonProperty( value = "date", access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime date;
 
-    @JsonProperty( value = "comments", access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
+    // @JsonProperty( value = "comments", access = JsonProperty.Access.READ_ONLY)
     private List<Comment> comments;
 
     public PostDTO(Long postId, String title, String content, CustomUser author, LocalDateTime date, List<Comment> comments) {
@@ -53,6 +46,7 @@ public class PostDTO {
         this.author = author;
         this.date = date;
         this.comments = comments;
+        this.authorUsername = author.getUsername();
     }
 
     public PostDTO(Post post){
@@ -62,6 +56,8 @@ public class PostDTO {
         this.author = post.getAuthor();
         this.date = post.getDate();
         this.comments = post.getComments();
+        this.authorUsername = post.getAuthor().getUsername();
+
     }
 
     
@@ -113,6 +109,14 @@ public class PostDTO {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 
     }

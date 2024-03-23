@@ -1,49 +1,42 @@
-package com.example.demo.model;
+package com.example.demo.service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.example.demo.service.CommentDTO;
+import com.example.demo.model.Comment;
+import com.example.demo.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
-@Entity
-@Table(name="Comment_table")
-public class Comment {
+public class CommentDTO {
     /**
      * Not only registered users, but anybody can comment. 
      * Hence, comment author is a simple string
      **/
-    @Column(name="author")
     private String author;
 
-    @Column(name="commentID")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Id
+
     private Long commentId;
 
-    @Column(name="content")
     private String content;
 
-    @Column(name="date")
     private LocalDateTime date;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "postID", referencedColumnName = "postID")
+    // @JsonProperty( value = "post", access = JsonProperty.Access.READ_ONLY)
     private Post post;
 
-    public Comment() {}
+    public CommentDTO() {}
 
-    public Comment(String author, Long commentId, String content, LocalDateTime date, Post post) {
+    public CommentDTO(Comment comment) {
+        this.author = comment.getAuthor();
+        this.commentId = comment.getCommentId();
+        this.content = comment.getContent();
+        this.date = comment.getDate();
+        this.post = comment.getPost();
+    }
+
+
+    public CommentDTO(String author, Long commentId, String content, LocalDateTime date, Post post) {
         this.author = author;
         this.commentId = commentId;
         this.content = content;
@@ -51,13 +44,6 @@ public class Comment {
         this.post = post;
     }
 
-    public Comment(CommentDTO comment) {
-        this.author = comment.getAuthor();
-        this.commentId = comment.getCommentId();
-        this.content = comment.getContent();
-        this.date = comment.getDate();
-        this.post = comment.getPost();
-    }
 
     public String getAuthor() {
         return author;

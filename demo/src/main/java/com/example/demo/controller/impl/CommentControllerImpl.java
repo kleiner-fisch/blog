@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.CommentController;
 import com.example.demo.model.Comment;
+import com.example.demo.service.CommentDTO;
 import com.example.demo.service.CommentService;
 
 @RestController
@@ -30,16 +31,18 @@ public class CommentControllerImpl implements CommentController{
         this.commentService = commentService;
     }
 
-    public Long createComment(Long postId, Comment comment){
+    public Long createComment(Long postId, CommentDTO comment){
         return this.commentService.createComment(comment, postId);
     }
 
-    public Long updateComment(Long postId, Long commentId, Comment comment){
-        return this.commentService.updateComment(commentId, comment);
-    }
+    // public Long updateComment(Long postId, Long commentId, CommentDTO comment){
+    //     return this.commentService.updateComment(commentId, comment);
+    // }
 
-    public Comment getComment(Long postId, Long commentId){
-        return this.commentService.getComment(commentId);
+    public CommentDTO getComment(Long postId, Long commentId){
+        CommentDTO comment = this.commentService.getComment(commentId);
+        comment.setPost(null);
+        return comment;
     }
 
 
@@ -48,8 +51,10 @@ public class CommentControllerImpl implements CommentController{
     }
 
     @Override
-    public Page<Comment> getAllComments(Long postID, Pageable pageable) {
-        return this.commentService.findAllCommentsForPost(postID, pageable);
+    public Page<CommentDTO> getAllComments(Long postID, Pageable pageable) {
+        Page<CommentDTO> comments =  this.commentService.findAllCommentsForPost(postID, pageable);
+        comments.forEach(c -> c.setPost(null));
+        return comments;
 
     }
 

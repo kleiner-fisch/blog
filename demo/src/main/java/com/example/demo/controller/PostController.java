@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.exception.NotAuthorizedException;
@@ -47,18 +46,18 @@ public interface PostController {
     //
     // UPDATE POST
     //
-    @Operation(description = "updates the specified post, overwriting stored data with" + 
-            " provided non-null data. Null data is ignored.")
-    @PutMapping("/{postId}")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "404", description = "The given post does not exist"),
-        @ApiResponse(responseCode = "400", description = "Error in the provided post"),
-        @ApiResponse(responseCode = "200", description = "Successfull request") })
-    public Long updatePost(
-        @Parameter(description = "the post to update") 
-            @PathVariable("postId") Long postId, 
-        @Parameter(description = "the post to create. No null values allowed", example = "{'content':'New post content'" ) 
-            @RequestBody Post post);
+    // @Operation(description = "updates the specified post, overwriting stored data with" + 
+    //         " provided non-null data. Null data is ignored.")
+    // @PutMapping("/{postId}")
+    // @ApiResponses(value = {
+    //     @ApiResponse(responseCode = "404", description = "The given post does not exist"),
+    //     @ApiResponse(responseCode = "400", description = "Error in the provided post"),
+    //     @ApiResponse(responseCode = "200", description = "Successfull request") })
+    // public Long updatePost(
+    //     @Parameter(description = "the post to update") 
+    //         @PathVariable("postId") Long postId, 
+    //     @Parameter(description = "the post to create. No null values allowed", example = "{'content':'New post content'" ) 
+    //         @RequestBody Post post);
 
 
     //

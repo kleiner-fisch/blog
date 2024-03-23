@@ -42,19 +42,6 @@ public class PostServiceImpl implements PostService {
         this.postRepository.save(post);
         return post.getPostId();
     }
-/*
-    TODO:
-
-        I GET THE FOLLOWING Exception:
-
-        java.time.format.DateTimeParseException: Text 'http://techcrunch.com/2010/03/23/yahoo-top-ad-malware-distributo...' could not be parsed at index 0
-        at java.base/java.time.format.DateTimeFormatter.parseResolved0(Unknown Source) ~[na:na]
-        at java.base/java.time.format.DateTimeFormatter.parse(Unknown Source) ~[na:na]
-        at java.base/java.time.LocalDateTime.parse(Unknown Source) ~[na:na]
-        at java.base/java.time.LocalDateTime.parse(Unknown Source) ~[na:na]
-
-*/
-
 
     @Override
     public Long updatePost(Long postId, Post post) {

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,7 +59,7 @@ private static final String[] AUTH_WHITELIST = {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-    httpSecurity.authorizeHttpRequests(registry -> 
+    return httpSecurity.authorizeHttpRequests(registry -> 
     {
       // everybody can create users
       registry.requestMatchers(HttpMethod.POST, "/users").permitAll()
@@ -76,11 +77,9 @@ private static final String[] AUTH_WHITELIST = {
           .requestMatchers(new RegexRequestMatcher("/posts/[0-9]+/comments/*", HttpMethod.DELETE.toString())).hasRole(ADMIN_ROLE)
           .requestMatchers(new RegexRequestMatcher("/posts/[0-9]+", HttpMethod.DELETE.toString())).hasAnyRole(ADMIN_ROLE, USER_ROLE)
           .requestMatchers( AUTH_WHITELIST).hasAnyRole(ADMIN_ROLE, USER_ROLE);
-    });
-
-    httpSecurity.csrf(AbstractHttpConfigurer::disable);
-    DefaultSecurityFilterChain filterChain = httpSecurity.httpBasic(Customizer.withDefaults()).build();
-    return filterChain;
+    }).csrf(AbstractHttpConfigurer::disable)
+    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    .httpBasic(Customizer.withDefaults()).build();
   }
 
   @Bean

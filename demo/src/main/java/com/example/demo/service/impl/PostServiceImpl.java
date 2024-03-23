@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Util;
@@ -11,6 +14,7 @@ import com.example.demo.exception.PostNotFoundException;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.service.PostDTO;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 
@@ -31,17 +35,21 @@ public class PostServiceImpl implements PostService {
         this.userService = userService;
     }
 
+
+
     @Override
-    public Long createPost(Post post) {
-        post.setDate(LocalDateTime.now());
-        CustomUser customUser = userService.getUserEntity(post.getAuthor().getUserId());
-        customUser.getPosts().add(post);
-        this.postRepository.save(post);
-        return post.getPostId();
+    public Long createPost(PostDTO post) {
+        Post postEntity = new Post(post);
+        postEntity.setDate(LocalDateTime.now());
+        CustomUser currentUser = userService.getCurrentUser();
+        postEntity.setAuthor(currentUser);
+        currentUser.getPosts().add(postEntity);
+        this.postRepository.save(postEntity);
+        return postEntity.getPostId();
     }
 
     @Override
-    public Long updatePost(Long postId, Post post) {
+    public Long updatePost(Long postId, PostDTO post) {
         try {
             Post storedPost = this.postRepository.getReferenceById(postId);
             Util.updateValue(storedPost::setAuthor, post.getAuthor());            
@@ -69,10 +77,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPost(Long postId) {
+    public PostDTO getPost(Long postId) {
         var post = this.postRepository.findById(postId);
         if (post.isPresent()) {
-            return post.get();
+            return new PostDTO(post.get());
         } else {
             String msg = "Requested post not found. Given postID: " + postId;
             throw new PostNotFoundException(msg);
@@ -80,15 +88,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> getAllPosts(Pageable pageable) {
-        return this.postRepository.findAll(pageable);
+    public Page<PostDTO> getAllPosts(Pageable pageable) {
+        return this.postRepository.findAll(pageable).map(post -> new PostDTO(post));
     }
 
     @Override
-    public Page<Post> findAllPostsByUser(Long userID, Pageable pageable) {
+    public Page<PostDTO> findAllPostsByUser(Long userID, Pageable pageable) {
         CustomUser author = new CustomUser();
         author.setUserId(userID);
-        return this.postRepository.findAllByAuthor(author, pageable);
+        return this.postRepository.findAllByAuthor(author, pageable).map(post -> new PostDTO(post));
     }
 
     // @Override
@@ -111,18 +119,18 @@ public class PostServiceImpl implements PostService {
     //     return this.getAllPosts(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     // }
 
-    @Override
-    public void addAllPosts(List<Post> users) {
-        this.postRepository.saveAll(users);
-    }
+    // @Override
+    // public void addAllPosts(List<Post> users) {
+    //     this.postRepository.saveAll(users);
+    // }
 
-    @Override
-    public void deleteAllPosts(){
-        this.postRepository.deleteAll();
-    }
+    // @Override
+    // public void deleteAllPosts(){
+    //     this.postRepository.deleteAll();
+    // }
 
-    @Override
-    public void flush(){
-        this.postRepository.flush();
-    }
+    // @Override
+    // public void flush(){
+    //     this.postRepository.flush();
+    // }
 }

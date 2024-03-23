@@ -57,6 +57,13 @@ public class UserServiceImpl implements UserService{
         return user.getUsername().equals(username) || user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(ADMIN_ROLE));
     }
 
+    @Override
+    public CustomUser getCurrentUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User  user = (User) auth.getPrincipal();
+        return userRepository.findByUsername(user.getUsername()).get();
+    }
+
 
     @Override
     public Long updateUser(Long userId, UserDTO user) {

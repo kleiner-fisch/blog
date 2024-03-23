@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -102,6 +103,7 @@ public interface UserController {
     // 
     // DELETE USER
     //
+    @SecurityRequirement(name = "BasicAuth")
     @Operation(description = "Deletes the user with the given userId. May only be done by admins and the user to be removed itself. "
         + "When a user is deleted, the users posts are not deleted. Instead, all posts of the user are transferred to a special user")
     @DeleteMapping("/{userId}")

@@ -30,25 +30,22 @@ public class UserDTO {
      */
     @NotBlank(message = "password must not be empty")
     @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
-    @Schema(description = "password used for authentification", example = "12345", accessMode = AccessMode.WRITE_ONLY) 
     private String password;
 
     @Email(message = "given email address is not wellformed")
-    @Schema(description = "mail account. Currently not used.", example = "barman@mail.org") 
     private String mail;
 
 
     /**
      * The id should not be read only. It should not be transferred within user objects
      */
-    @Schema(description = "used as ID in the database, and also as parameter in URLs.", example = "1", accessMode = AccessMode.READ_ONLY) 
+    @JsonProperty( value = "password", access = JsonProperty.Access.READ_ONLY)
     private Long userId;
 
     /**
      * The roles should not be returned to the client, and should not be provided when creating new users. 
      */
     @JsonProperty( value = "roles", access = JsonProperty.Access.WRITE_ONLY)
-    @Schema(description = "used to check whether a user is authorized to perform actions") 
     @JsonIgnore
     private String roles;
 

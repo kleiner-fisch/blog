@@ -1,18 +1,13 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import com.example.demo.model.CustomUser;
-
-import jakarta.validation.constraints.Pattern;
 
 public interface UserService {
 
+    public CustomUser getCurrentUser();
 
     public Long createUser(UserDTO user);
     public Long updateUser(Long userId, UserDTO user);

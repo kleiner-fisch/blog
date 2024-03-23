@@ -1,14 +1,18 @@
-package com.example.demo.model;
+package com.example.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.Cascade;
 
-import com.example.demo.service.PostDTO;
+import com.example.demo.model.Comment;
+import com.example.demo.model.CustomUser;
+import com.example.demo.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,38 +23,30 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name="Post_Table")
-public class Post {
-    @Column(name="postID")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Id
+
+public class PostDTO {
+
     private Long postId;
 
-    @Column(name="title")
+    @NotNull(message = "title must not be null")
     private String title;
 
-    @Column(name="content")
+    @NotNull(message = "content must not be null")
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "userID", referencedColumnName = "userID")
     @JsonProperty( value = "author", access = JsonProperty.Access.READ_ONLY)
-    @NotNull
     private CustomUser author;
 
-    @Column(name="date")
     @JsonProperty( value = "date", access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime date;
 
     @JsonProperty( value = "comments", access = JsonProperty.Access.READ_ONLY)
-    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
-    @JsonIgnore
     private List<Comment> comments;
 
-    public Post(Long postId, String title, String content, CustomUser author, LocalDateTime date, List<Comment> comments) {
+    public PostDTO(Long postId, String title, String content, CustomUser author, LocalDateTime date, List<Comment> comments) {
         this.postId = postId;
         this.title = title;
         this.content = content;
@@ -59,8 +55,7 @@ public class Post {
         this.comments = comments;
     }
 
-
-    public Post(PostDTO post){
+    public PostDTO(Post post){
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
@@ -68,8 +63,9 @@ public class Post {
         this.date = post.getDate();
         this.comments = post.getComments();
     }
+
     
-    public Post() {}
+    public PostDTO() {}
 
     public Long getPostId() {
         return postId;

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.PostController;
 import com.example.demo.model.Post;
+import com.example.demo.service.PostDTO;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 
@@ -16,15 +17,13 @@ public class PostControllerImpl implements PostController {
 
 
     private PostService postService;
-    private UserService userService;
 
-    public PostControllerImpl(PostService postService, UserService userService) {
+    public PostControllerImpl(PostService postService) {
         this.postService = postService;
-        this.userService = userService;
     }
 
     @Override
-    public Long createPost(Post post){
+    public Long createPost(PostDTO post){
         return this.postService.createPost(post);
     }
 
@@ -35,7 +34,7 @@ public class PostControllerImpl implements PostController {
 
 
     @Override
-    public Page<Post> getUserPosts(Long userId, Pageable pageable) {
+    public Page<PostDTO> getUserPosts(Long userId, Pageable pageable) {
         // TODO do we need PostDTO??
         return postService.findAllPostsByUser(userId, pageable);
         // UserDTO user =  this.userService.getUserDTO(userId);
@@ -46,7 +45,7 @@ public class PostControllerImpl implements PostController {
 
 
     @Override
-    public Post getPost(Long postId){
+    public PostDTO getPost(Long postId){
         return this.postService.getPost(postId);
     }
 
@@ -65,7 +64,7 @@ public class PostControllerImpl implements PostController {
     }
 
     @Override
-    public Page<Post> getAllPosts(Pageable pageable) {
+    public Page<PostDTO> getAllPosts(Pageable pageable) {
         return this.postService.getAllPosts(pageable);
     }
 

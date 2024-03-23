@@ -8,19 +8,19 @@ import org.springframework.data.domain.Pageable;
 import com.example.demo.model.Post;
 
 public interface PostService {
-    public Long createPost(Post post);
-    public Long updatePost(Long postId, Post post);
+    public Long createPost(PostDTO post);
+    public Long updatePost(Long postId, PostDTO post);
     public Long deletePost(Long postId);
-    public Post getPost(Long postId);
+    public PostDTO getPost(Long postId);
 
-    public Page<Post> getAllPosts(Pageable pageable);
+    public Page<PostDTO> getAllPosts(Pageable pageable);
 
-    public void addAllPosts(List<Post> posts);
+    // public void addAllPosts(List<PostDTO> posts);
 
-    public void deleteAllPosts();
+    // public void deleteAllPosts();
 
-    public void flush();
+    // public void flush();
 
-    public Page<Post> findAllPostsByUser(Long userID, Pageable pageRequest);
+    public Page<PostDTO> findAllPostsByUser(Long userID, Pageable pageRequest);
 
 }

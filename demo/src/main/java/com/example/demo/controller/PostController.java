@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Post;
+import com.example.demo.service.PostDTO;
 import com.example.demo.service.validation.AllowSortFields;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -32,6 +34,7 @@ public interface PostController {
     //
     // CREATE NEW POST
     //
+    @SecurityRequirement(name = "BasicAuth")
     @Operation(description = "creates a new post")
     @PostMapping()
     @ApiResponses(value = {
@@ -39,9 +42,8 @@ public interface PostController {
         @ApiResponse(responseCode = "400", description = "Error in the provided post data"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
     public Long createPost(
-        // TODO create Post endpoint currently  listed under post-entity-controller (which we dont want)
         @Parameter(description = "the post to create. No null values allowed", example = "{'content':'Post content', 'title':'Post title'}" ) 
-            @Valid @RequestBody Post post);
+            @Valid @RequestBody PostDTO post);
 
     //
     // UPDATE POST
@@ -69,7 +71,7 @@ public interface PostController {
             @ApiResponse(responseCode = "404", description = "The given user does not exist"),
             @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
             @ApiResponse(responseCode = "200", description = "Successfull request") })
-    public Page<Post> getUserPosts(
+    public Page<PostDTO> getUserPosts(
         @Parameter(description = "the user whose posts we should fetch") 
             @PathVariable("userId") Long userId,
         @AllowSortFields(value = {"postId", "date"})
@@ -84,7 +86,7 @@ public interface PostController {
         @ApiResponse(responseCode = "404", description = "The given post does not exist"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
     @GetMapping("/{postId}")
-    public Post getPost(
+    public PostDTO getPost(
         @Parameter(description = "id of the post to fetch")
             @PathVariable("postId") Long postId);
 
@@ -96,7 +98,7 @@ public interface PostController {
             @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
             @ApiResponse(responseCode = "200", description = "Successfull request") })
     @GetMapping()
-    public Page<Post> getAllPosts(
+    public Page<PostDTO> getAllPosts(
         @Parameter(description = "page data of the posts to fetch")
             @AllowSortFields(value = {"postId", "date", "author"})
             @ParameterObject @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable) ;
@@ -104,6 +106,7 @@ public interface PostController {
     //
     // DELETE POST
     //
+    @SecurityRequirement(name = "BasicAuth")
     @Operation(description = "Deletes a post, along with its comments.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfull request"),

@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
     public Long createUser(UserDTO user) {
         CustomUser userEntity = new CustomUser(user);
         this.userRepository.save(userEntity);
-        return user.getUserId();
+        return userEntity.getUserId();
     }
 
 

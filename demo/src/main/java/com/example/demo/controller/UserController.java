@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.MediaTypes;
 
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
@@ -57,7 +59,7 @@ public interface UserController {
     // GET USER
     //
     @Operation(description = "Returns a single user.")
-    @GetMapping("/{userId}")
+    @GetMapping(value = "/{userId}", produces = MediaTypes.HAL_JSON_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfull request"),
             @ApiResponse(responseCode = "404", description = "Resource not found", content = {
@@ -95,7 +97,7 @@ public interface UserController {
         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
     @GetMapping()
-    public Page<UserDTO> getAllUsers(
+    public CollectionModel<UserDTO> getAllUsers(
         @AllowSortFields(value = {"username", "userId"})
             @ParameterObject @PageableDefault(sort = {"username"} ) 
             Pageable pageable);

@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserDTO {
+public class UserDTO extends RepresentationModel<UserDTO> {
     
     @NotBlank(message = "username must not be null or only whitespace")
     @Schema(description = "username that is used to login, and is used as that users name in posts", example = "barman") 

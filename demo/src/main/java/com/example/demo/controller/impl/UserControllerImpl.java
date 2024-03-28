@@ -1,44 +1,18 @@
 package com.example.demo.controller.impl;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.demo.service.DefaultValues.DEFAULT_SORTING_DIRECTION;
 import static com.example.demo.service.DefaultValues.USER_ROLE;
-import static com.example.demo.service.DefaultValues.DEFAULT_USER_SORTING_COLUMN;
-
-import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_LIMIT_STRING;
-import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_OFFSET_STRING;
-
 import com.example.demo.controller.UserController;
-import com.example.demo.exception.NotAuthorizedException;
-import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
-
-import io.swagger.v3.oas.annotations.media.Content;
 
 @RestController
 @Validated
@@ -78,12 +52,21 @@ public class UserControllerImpl implements UserController{
 
     @Override
     public UserDTO getUser(Long userId) {
-        return this.userService.getUserDTO(userId);
+
+        UserDTO result = this.userService.getUserDTO(userId);
+        Link link = WebMvcLinkBuilder.linkTo(UserController.class).slash(result.getUserId()).withSelfRel();
+        result.add(link);
+        return result;
     }
-    
+
     @Override
-    public Page<UserDTO> getAllUsers(Pageable pageable){
-        return userService.getAllUsers(pageable);
+    public CollectionModel<UserDTO> getAllUsers(Pageable pageable){
+        Page<UserDTO> users =  userService.getAllUsers(pageable);
+        users.forEach(user -> user.add(WebMvcLinkBuilder.linkTo(UserController.class).slash(user.getUserId()).withRel("user")));
+        CollectionModel<UserDTO> result = CollectionModel.of(users).withFallbackType(UserDTO.class);
+        Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getAllUsers(pageable)).withSelfRel();
+        result.add(link);
+        return result;
       }
       
    

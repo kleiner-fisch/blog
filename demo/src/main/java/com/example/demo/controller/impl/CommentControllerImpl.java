@@ -1,22 +1,17 @@
 package com.example.demo.controller.impl;
 
-import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.CommentController;
-import com.example.demo.model.Comment;
+import com.example.demo.controller.PostController;
 import com.example.demo.service.CommentDTO;
 import com.example.demo.service.CommentService;
 
@@ -42,6 +37,12 @@ public class CommentControllerImpl implements CommentController{
     public CommentDTO getComment(Long postId, Long commentId){
         CommentDTO comment = this.commentService.getComment(commentId);
         comment.setPost(null);
+        // Link to the post this comment refers to
+        Link postLink = WebMvcLinkBuilder.linkTo(PostController.class).slash(postId).withRel("post");
+        comment.add(postLink);
+        // Link to this comment
+        Link selfLink = WebMvcLinkBuilder.linkTo(CommentController.class, postId).slash(commentId).withSelfRel();
+        comment.add(selfLink);
         return comment;
     }
 
@@ -51,10 +52,22 @@ public class CommentControllerImpl implements CommentController{
     }
 
     @Override
-    public Page<CommentDTO> getAllComments(Long postID, Pageable pageable) {
+    public CollectionModel<CommentDTO> getAllComments(Long postID, Pageable pageable) {
         Page<CommentDTO> comments =  this.commentService.findAllCommentsForPost(postID, pageable);
+        // We don't want each comment to include the post
         comments.forEach(c -> c.setPost(null));
-        return comments;
+        CollectionModel<CommentDTO> result = CollectionModel.of(comments).withFallbackType(CommentDTO.class);
+        // Link to this method/endpoint
+        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CommentController.class, postID).getAllComments(postID, pageable)).withSelfRel();
+        result.add(selfLink);
+        // Link to each comment
+        Consumer<CommentDTO> addPostLinks = comment -> comment.add(
+                WebMvcLinkBuilder.linkTo(CommentController.class, postID).slash(comment.getCommentId()).withRel("comment"));
+        comments.forEach(addPostLinks);
+        // Link to the post these comments refer to
+        Link postLink = WebMvcLinkBuilder.linkTo(PostController.class).slash(postID).withRel("post");
+        result.add(postLink);
+        return result;
 
     }
 

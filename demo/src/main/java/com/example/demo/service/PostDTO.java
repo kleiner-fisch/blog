@@ -3,6 +3,8 @@ package com.example.demo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.example.demo.model.Comment;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
@@ -12,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 
 
-public class PostDTO {
+public class PostDTO extends RepresentationModel<PostDTO>{
 
     private Long postId;
 
@@ -25,11 +27,6 @@ public class PostDTO {
     @JsonIgnore
     // @JsonProperty( value = "author", access = JsonProperty.Access.READ_ONLY)
     private CustomUser author;
-
-    @JsonProperty( value = "authorUsername", access = JsonProperty.Access.READ_ONLY)
-    private String authorUsername;
-
-
 
 
     @JsonProperty( value = "date", access = JsonProperty.Access.READ_ONLY)
@@ -46,7 +43,6 @@ public class PostDTO {
         this.author = author;
         this.date = date;
         this.comments = comments;
-        this.authorUsername = author.getUsername();
     }
 
     public PostDTO(Post post){
@@ -56,7 +52,6 @@ public class PostDTO {
         this.author = post.getAuthor();
         this.date = post.getDate();
         this.comments = post.getComments();
-        this.authorUsername = post.getAuthor().getUsername();
 
     }
 
@@ -109,14 +104,6 @@ public class PostDTO {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
-
-    public String getAuthorUsername() {
-        return authorUsername;
-    }
-
-    public void setAuthorUsername(String authorUsername) {
-        this.authorUsername = authorUsername;
     }
 
     }

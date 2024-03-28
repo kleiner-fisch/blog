@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,7 +74,7 @@ public interface CommentController {
         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
         @ApiResponse(responseCode = "404", description = "The specified post could not be found"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
-    public Page<CommentDTO> getAllComments(
+    public CollectionModel<CommentDTO> getAllComments(
         @Parameter(description = "id of the post whose comments to fetch")
             @PathVariable("postId") Long postId,
         @Parameter(description = "page data of the posts to fetch")

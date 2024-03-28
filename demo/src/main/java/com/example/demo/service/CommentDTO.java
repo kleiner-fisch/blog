@@ -1,13 +1,16 @@
 package com.example.demo.service;
 
 import java.time.LocalDateTime;
+
+import org.springframework.hateoas.RepresentationModel;
+
 import com.example.demo.model.Comment;
 import com.example.demo.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class CommentDTO {
+public class CommentDTO extends RepresentationModel<CommentDTO>  {
     /**
      * Not only registered users, but anybody can comment. 
      * Hence, comment author is a simple string

@@ -10,6 +10,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.demo.service.DefaultValues.USER_ROLE;
+import static com.example.demo.service.DefaultValues.getDefaultUserPageRequest;
+
+
+import com.example.demo.controller.PostController;
 import com.example.demo.controller.UserController;
 import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
@@ -54,8 +58,10 @@ public class UserControllerImpl implements UserController{
     public UserDTO getUser(Long userId) {
 
         UserDTO result = this.userService.getUserDTO(userId);
-        Link link = WebMvcLinkBuilder.linkTo(UserController.class).slash(result.getUserId()).withSelfRel();
-        result.add(link);
+        Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(result.getUserId()).withSelfRel();
+        result.add(selfLink);
+        Link postsLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PostController.class).getUserPosts(userId, getDefaultUserPageRequest())).withRel("userPosts");
+        result.add(postsLink);
         return result;
     }
 

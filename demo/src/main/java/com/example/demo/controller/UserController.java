@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
 
@@ -28,15 +26,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
-
-import static com.example.demo.service.DefaultValues.DEFAULT_SORTING_DIRECTION;
-import static com.example.demo.service.DefaultValues.USER_ROLE;
-import static com.example.demo.service.DefaultValues.DEFAULT_USER_SORTING_COLUMN;
-
-import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_LIMIT_STRING;
-import static com.example.demo.service.DefaultValues.DEFAULT_PAGE_OFFSET_STRING;
 
 @RequestMapping("/users")
 @Tag(name = "User_Endpoints", description = "Methods to interact with users")
@@ -69,26 +58,7 @@ public interface UserController {
         @Parameter(description = "id of the user to fetch") 
             @PathVariable("userId") Long userId);
     
-    //
-    // GET ALL USERS
-    //
-    // @Operation(description = "Returns a page of all users.")
-    // @GetMapping()
-    // @ApiResponses(value = {
-    //         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
-    //         @ApiResponse(responseCode = "200", description = "Successfull request") })
-    // public Page<UserDTO> getAllUsers(
-    //         @Schema(description = "number of users per page", required = false, type = "int", defaultValue = DEFAULT_PAGE_LIMIT_STRING) @RequestParam(name = "pageSize", defaultValue = "10", required = false) @PositiveOrZero() Integer pageSize,
-    //         @Schema(description = "the page to fetch", required = false, type = "int", defaultValue = DEFAULT_PAGE_OFFSET_STRING) @RequestParam(name = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
-    //         @Schema(description = "the direction of the users should be sorted", required = false, type = "string", allowableValues = {
-    //                 "asc",
-    //                 "desc" }, defaultValue = DEFAULT_SORTING_DIRECTION) @RequestParam(name = "sortDirection", defaultValue = "asc", required = false) @Pattern(regexp = "asc|desc", flags = {
-    //                         Pattern.Flag.CASE_INSENSITIVE }) String sortDirection,
-    //         @Schema(description = "the property used to sort the users", required = false, type = "string", allowableValues = {
-    //                 "userId", "username",
-    //                 "mail" }, defaultValue = DEFAULT_USER_SORTING_COLUMN) @RequestParam(name = "sortBy", defaultValue = DEFAULT_USER_SORTING_COLUMN, required = false) @Pattern(regexp = "userId|username|mail", flags = {
-    //                         Pattern.Flag.CASE_INSENSITIVE }) String sortBy);
-
+            
     //
     // GET ALL USERS
     //

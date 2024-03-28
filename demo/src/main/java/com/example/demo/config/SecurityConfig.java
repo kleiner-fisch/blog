@@ -76,7 +76,7 @@ private static final String[] AUTH_WHITELIST = {
           // // As comments currently have arbitrary authors, only admins can remove them
           .requestMatchers(new RegexRequestMatcher("/posts/[0-9]+/comments/*", HttpMethod.DELETE.toString())).hasRole(ADMIN_ROLE)
           .requestMatchers(new RegexRequestMatcher("/posts/[0-9]+", HttpMethod.DELETE.toString())).hasAnyRole(ADMIN_ROLE, USER_ROLE)
-          .requestMatchers( AUTH_WHITELIST).hasAnyRole(ADMIN_ROLE, USER_ROLE);
+          .requestMatchers( HttpMethod.GET, AUTH_WHITELIST).permitAll();
     }).csrf(AbstractHttpConfigurer::disable)
     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
     .httpBasic(Customizer.withDefaults()).build();

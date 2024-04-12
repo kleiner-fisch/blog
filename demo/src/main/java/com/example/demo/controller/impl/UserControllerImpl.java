@@ -1,9 +1,12 @@
 package com.example.demo.controller.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +18,9 @@ import static com.example.demo.service.DefaultValues.getDefaultUserPageRequest;
 
 import com.example.demo.controller.PostController;
 import com.example.demo.controller.UserController;
+import com.example.demo.model.CustomUser;
 import com.example.demo.service.UserDTO;
+import com.example.demo.service.UserDTOAssembler;
 import com.example.demo.service.UserService;
 
 @RestController
@@ -24,14 +29,17 @@ public class UserControllerImpl implements UserController{
 
     // TODO in the api.yaml openAPI spec file we use user_id, instead of userId
     // We should fix the api.yaml names to use camel case.
+    @Autowired
     private UserService userService;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserControllerImpl(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private UserDTOAssembler userDTOAssembler;
+
+    @Autowired
+	private PagedResourcesAssembler<CustomUser> pagedResourcesAssembler;
         
     @Override
     public Long createUser(UserDTO user) {
@@ -66,25 +74,12 @@ public class UserControllerImpl implements UserController{
     }
 
     @Override
-    public CollectionModel<UserDTO> getAllUsers(Pageable pageable){
-        Page<UserDTO> users =  userService.getAllUsers(pageable);
-        users.forEach(user -> user.add(WebMvcLinkBuilder.linkTo(UserController.class).slash(user.getUserId()).withRel("user")));
-        CollectionModel<UserDTO> result = CollectionModel.of(users).withFallbackType(UserDTO.class);
-        Link link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getAllUsers(pageable)).withSelfRel();
-        result.add(link);
-        return result;
+    public PagedModel<UserDTO> getAllUsers(Pageable pageable){
+        Page<CustomUser> users =  userService.getAllUsers(pageable);
+        // CollectionModel<UserDTO> result = CollectionModel.of(users).withFallbackType(UserDTO.class);
+        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getAllUsers(pageable)).withSelfRel();
+        return pagedResourcesAssembler.toModel(users, userDTOAssembler, selfLink);
       }
-      
-   
-    // @Override
-    // public Page<UserDTO> getAllUsers(Integer pageSize, Integer page, 
-    //         String sortDirection, String sortBy) {
-    //     Page<UserDTO> users = this.userService.getAllUsers(Optional.ofNullable(pageSize),
-    //             Optional.ofNullable(page), Optional.ofNullable(sortDirection), Optional.ofNullable(sortBy));
-    //     // we do not want the posts when listing many users
-    //     users.forEach(user -> user.setPosts(null));
-    //     return users;
-    // }
 
     @Override
     public Long deleteUser(Long userId) {

@@ -23,7 +23,7 @@ public class OpenAPIConfig {
 	public OpenAPI springShopOpenAPI() {
 		return new OpenAPI()
 				.info(new Info().title("SpringBlog API")
-				.description("Small Blog developed with Spring Boot")
+				.description("Small Blog developed with Spring Boot. Source code available on Github.")
 				.version("v0.0.1")
 				.license(new License().name("Apache 2.0").url("http://springdoc.org")))
 				.externalDocs(new ExternalDocumentation()

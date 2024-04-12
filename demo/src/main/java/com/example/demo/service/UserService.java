@@ -26,11 +26,11 @@ public interface UserService {
     public CustomUser getUserEntity(Long userId);
 
     public UserDTO getUserDTO(Long userId);
-    public Page<UserDTO> getAllUsers();
+    public Page<CustomUser> getAllUsers();
     // public Page<UserDTO> getAllUsers(Optional<Integer> pageLimit, Optional<Integer> pageOffset, Optional<String> sortDirection,
     //         Optional<String> SortBy);
 
-    public Page<UserDTO> getAllUsers(Pageable pageable);
+    public Page<CustomUser> getAllUsers(Pageable pageable);
 
     public void addAllUsers(List<CustomUser> users);
 

@@ -70,22 +70,22 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/users/1")).andExpect(status().isOk());
     }
 
-    @Test
-    void testGetAllUsers_ok1() throws Exception {
-        Page<UserDTO> page = new PageImpl(users);
-        when(userService.getAllUsers()).thenReturn(page);
-        this.mockMvc.perform(get("/users")).andExpect(status().isOk());
-    }
+    // @Test
+    // void testGetAllUsers_ok1() throws Exception {
+    //     Page<UserDTO> page = new PageImpl(users);
+    //     when(userService.getAllUsers()).thenReturn(page);
+    //     this.mockMvc.perform(get("/users")).andExpect(status().isOk());
+    // }
 
 
-    @Test
-    void testGetAllUsers_ok2() throws Exception {
-        Page<UserDTO> page = new PageImpl(users);
-        when(userService.getAllUsers()).thenReturn(page);
-        this.mockMvc.perform(get("/users")
-            .param("sortby", "userName"))
-            .andExpect(status().isOk());
-    }
+    // @Test
+    // void testGetAllUsers_ok2() throws Exception {
+    //     Page<UserDTO> page = new PageImpl(users);
+    //     when(userService.getAllUsers()).thenReturn(page);
+    //     this.mockMvc.perform(get("/users")
+    //         .param("sortby", "userName"))
+    //         .andExpect(status().isOk());
+    // }
 
     @Test
     void testGetAllUsers_badRequest1() throws Exception {

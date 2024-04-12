@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.PagedModel;
 
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
@@ -58,8 +59,7 @@ public interface UserController {
         @Parameter(description = "id of the user to fetch") 
             @PathVariable("userId") Long userId);
     
-            
-    //
+                //
     // GET ALL USERS
     //
     @Operation(description = "Returns a page of all users.")
@@ -67,10 +67,12 @@ public interface UserController {
         @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
         @ApiResponse(responseCode = "200", description = "Successfull request") })
     @GetMapping()
-    public CollectionModel<UserDTO> getAllUsers(
+    public PagedModel<UserDTO> getAllUsers(
         @AllowSortFields(value = {"username", "userId"})
             @ParameterObject @PageableDefault(sort = {"username"} ) 
             Pageable pageable);
+
+            
 
     // 
     // DELETE USER

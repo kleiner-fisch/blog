@@ -143,34 +143,21 @@ public class UserServiceImpl implements UserService{
     }
 
 
-            
+    @Override
+    public Page<CustomUser> getAllUsers(Pageable pageable) {
+        Page<CustomUser> users = this.userRepository.findAll(pageable);
+        return users;
+    }
+
     // @Override
-    // public Page<UserDTO> getAllUsers(
-    //         Optional<Integer> pageLimit,
-    //         Optional<Integer> pageOffset,
-    //         Optional<String> sortDirection,
-    //         Optional<String> sortBy) {
-    //     Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
-    //     Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-
-    //     Sort.Direction sortDirectionTmp = Sort.Direction.fromString(sortDirection.orElseGet(() -> DEFAULT_SORTING_DIRECTION));
-    //     Sort.Order sortOder = Sort.Order.by(DEFAULT_USER_SORTING_COLUMN).with(sortDirectionTmp).ignoreCase();
-    //     Sort sort = Sort.by(sortOder);
-    //     var pageRequest = PageRequest.of(offset, limit, sort);
-
-    //     Page<CustomUser> users = this.userRepository.findAll(pageRequest);
+    // public Page<UserDTO> getAllUsers(Pageable pageable) {
+    //     Page<CustomUser> users = this.userRepository.findAll(pageable);
     //     return users.map(user -> new UserDTO(user));
     // }
 
-    @Override
-    public Page<UserDTO> getAllUsers(Pageable pageable) {
-        Page<CustomUser> users = this.userRepository.findAll(pageable);
-        return users.map(user -> new UserDTO(user));
-    }
-
 
     @Override
-    public Page<UserDTO> getAllUsers() {
+    public Page<CustomUser> getAllUsers() {
         Integer offset = DEFAULT_PAGE_OFFSET;
         Integer limit =  DEFAULT_PAGE_LIMIT;
         Sort.Direction sortDirectionTmp = Sort.Direction.fromString(DEFAULT_SORTING_DIRECTION);

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.demo.controller.impl.UserControllerImpl;
 import com.example.demo.model.CustomUser;
-import com.example.demo.service.UserDTO;
+import com.example.demo.model.UserDTO;
 import com.example.demo.service.UserService;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

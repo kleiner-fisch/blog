@@ -18,8 +18,8 @@ import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
+import com.example.demo.model.UserDTO;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;

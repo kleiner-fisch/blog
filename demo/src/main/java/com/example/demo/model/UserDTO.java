@@ -1,11 +1,9 @@
-package com.example.demo.service;
+package com.example.demo.model;
 
 import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.example.demo.model.CustomUser;
-import com.example.demo.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

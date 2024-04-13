@@ -14,7 +14,7 @@ import static com.example.demo.service.DefaultValues.USER_ROLE;
 
 
 import com.example.demo.model.CustomUser;
-import com.example.demo.service.UserDTO;
+import com.example.demo.model.UserDTO;
 import com.example.demo.service.UserService;
 
 @DependsOnDatabaseInitialization

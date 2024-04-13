@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.demo.model.Post;
+import com.example.demo.model.PostDTO;
 
 public interface PostService {
     public Long createPost(PostDTO post);

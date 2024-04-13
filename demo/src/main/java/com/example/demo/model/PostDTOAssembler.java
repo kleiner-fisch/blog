@@ -1,11 +1,12 @@
-package com.example.demo.service;
+package com.example.demo.model;
 
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.controller.CommentController;
 import com.example.demo.controller.PostController;
-import com.example.demo.model.Post;
 
 @Component
 public class PostDTOAssembler 
@@ -21,9 +22,13 @@ public class PostDTOAssembler
     @Override
     public PostDTO toModel(Post entity) {
         PostDTO result = new PostDTO(entity);
+        Long postID = entity.getPostId();
         UserDTO author = userDTOAssembler.toModel(entity.getAuthor());
         result.setAuthor(author);
-        result.add(WebMvcLinkBuilder.linkTo(getControllerClass()).slash(result.getPostId()).withSelfRel());
+        Link selfLink = WebMvcLinkBuilder.linkTo(getControllerClass()).slash(postID).withSelfRel();
+        Link commentsLink = WebMvcLinkBuilder.linkTo(CommentController.class, postID)
+                .withRel("comments");
+        result.add(selfLink, commentsLink);
         return result;
     }
 }

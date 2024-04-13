@@ -15,7 +15,7 @@ import org.springframework.hateoas.PagedModel;
 
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.service.UserDTO;
+import com.example.demo.model.UserDTO;
 import com.example.demo.service.validation.AllowSortFields;
 
 import io.swagger.v3.oas.annotations.Operation;

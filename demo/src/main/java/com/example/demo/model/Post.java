@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.annotations.Cascade;
 
-import com.example.demo.service.PostDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

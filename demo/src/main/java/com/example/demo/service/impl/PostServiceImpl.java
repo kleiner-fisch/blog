@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.exception.PostNotFoundException;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
+import com.example.demo.model.PostDTO;
 import com.example.demo.repository.PostRepository;
-import com.example.demo.service.PostDTO;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 

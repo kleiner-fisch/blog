@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.example.demo.model.CustomUser;
+import com.example.demo.model.UserDTO;
 
 public interface UserService {
 

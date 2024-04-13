@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.model;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.controller.PostController;
 import com.example.demo.controller.UserController;
-import com.example.demo.model.CustomUser;
 
 import static com.example.demo.service.DefaultValues.getDefaultUserPageRequest;
 

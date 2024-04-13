@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.exception.NotAuthorizedException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Post;
-import com.example.demo.service.PostDTO;
+import com.example.demo.model.PostDTO;
 import com.example.demo.service.validation.AllowSortFields;
 
 import io.swagger.v3.oas.annotations.Operation;

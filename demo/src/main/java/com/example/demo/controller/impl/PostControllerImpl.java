@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.PostController;
 import com.example.demo.model.Post;
-import com.example.demo.service.PostDTO;
-import com.example.demo.service.PostDTOAssembler;
+import com.example.demo.model.PostDTO;
+import com.example.demo.model.PostDTOAssembler;
 import com.example.demo.service.PostService;
 
 @RestController

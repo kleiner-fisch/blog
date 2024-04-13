@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.example.demo.service.DefaultValues.USER_ROLE;
 import com.example.demo.controller.UserController;
 import com.example.demo.model.CustomUser;
-import com.example.demo.service.UserDTO;
-import com.example.demo.service.UserDTOAssembler;
+import com.example.demo.model.UserDTO;
+import com.example.demo.model.UserDTOAssembler;
 import com.example.demo.service.UserService;
 
 @RestController

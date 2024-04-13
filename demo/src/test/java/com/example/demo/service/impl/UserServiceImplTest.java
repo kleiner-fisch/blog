@@ -39,9 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Post;
+import com.example.demo.model.UserDTO;
 import com.example.demo.model.CustomUser;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserDTO;
 import com.example.demo.service.UserService;
 
 import static com.example.demo.service.DefaultValues.DELETED_USER;;

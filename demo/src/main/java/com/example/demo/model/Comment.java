@@ -3,7 +3,6 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import com.example.demo.service.CommentDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;

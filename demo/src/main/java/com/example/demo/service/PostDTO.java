@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.example.demo.model.Comment;
@@ -24,9 +25,8 @@ public class PostDTO extends RepresentationModel<PostDTO>{
     @NotNull(message = "content must not be null")
     private String content;
 
-    @JsonIgnore
-    // @JsonProperty( value = "author", access = JsonProperty.Access.READ_ONLY)
-    private CustomUser author;
+    @JsonProperty( value = "author", access = JsonProperty.Access.READ_ONLY)
+    private UserDTO author;
 
 
     @JsonProperty( value = "date", access = JsonProperty.Access.READ_ONLY)
@@ -40,7 +40,7 @@ public class PostDTO extends RepresentationModel<PostDTO>{
         this.postId = postId;
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.author = new UserDTO(author);
         this.date = date;
         this.comments = comments;
     }
@@ -49,7 +49,7 @@ public class PostDTO extends RepresentationModel<PostDTO>{
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getAuthor();
+        this.author = new UserDTO(post.getAuthor());
         this.date = post.getDate();
         this.comments = post.getComments();
 
@@ -76,10 +76,10 @@ public class PostDTO extends RepresentationModel<PostDTO>{
     public void setContent(String content) {
         this.content = content;
     }
-    public CustomUser getAuthor() {
+    public UserDTO getAuthor() {
         return author;
     }
-    public void setAuthor(CustomUser author) {
+    public void setAuthor(UserDTO author) {
         this.author = author;
     }
     public LocalDateTime getDate() {

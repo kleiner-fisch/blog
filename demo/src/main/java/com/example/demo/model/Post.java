@@ -64,7 +64,7 @@ public class Post {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.author = post.getAuthor();
+        this.author = new CustomUser(post.getAuthor());
         this.date = post.getDate();
         this.comments = post.getComments();
     }

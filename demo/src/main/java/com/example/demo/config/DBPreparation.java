@@ -40,7 +40,6 @@ public class DBPreparation implements CommandLineRunner{
             deleteUser.setMail("deleted@mail.org");
             deleteUser.setPassword("pw");
             deleteUser.setRoles(USER_ROLE);
-            deleteUser.setPosts(Collections.emptyList());
             deleteUser.setUsername(DELETED_USER);
             userService.createUser(deleteUser);
         }

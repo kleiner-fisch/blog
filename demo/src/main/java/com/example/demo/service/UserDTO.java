@@ -44,8 +44,8 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String roles;
 
     // @JsonProperty( value = "posts", access = JsonProperty.Access.READ_ONLY)
-    @JsonIgnore
-    private List<Post> posts;
+    // @JsonIgnore
+    // private List<Post> posts;
 
     public UserDTO() {   }
     
@@ -54,25 +54,25 @@ public class UserDTO extends RepresentationModel<UserDTO> {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.mail = user.getMail();
-        this.posts = user.getPosts();
+        // this.posts = user.getPosts();
     }
 
-    public UserDTO(Long userId, String username, String password, String mail, String roles, List<Post> posts) {
+    public UserDTO(Long userId, String username, String password, String mail, String roles /* , List<Post> posts*/) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.mail = mail;
-        this.posts = posts;
+        // this.posts = posts;
         this.roles = roles;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
+    // public List<Post> getPosts() {
+    //     return posts;
+    // }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
+    // public void setPosts(List<Post> posts) {
+    //     this.posts = posts;
+    // }
 
     public String getUsername() {
         return username;

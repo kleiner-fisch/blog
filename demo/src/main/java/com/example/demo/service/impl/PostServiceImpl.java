@@ -1,15 +1,10 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Util;
 import com.example.demo.exception.PostNotFoundException;
 import com.example.demo.model.CustomUser;
 import com.example.demo.model.Post;
@@ -17,8 +12,6 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostDTO;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -48,21 +41,6 @@ public class PostServiceImpl implements PostService {
         return postEntity.getPostId();
     }
 
-    @Override
-    public Long updatePost(Long postId, PostDTO post) {
-        try {
-            Post storedPost = this.postRepository.getReferenceById(postId);
-            Util.updateValue(storedPost::setAuthor, post.getAuthor());            
-            Util.updateValue(storedPost::setContent, post.getContent());
-            Util.updateValue(storedPost::setTitle, post.getTitle());
-            this.postRepository.save(storedPost);
-            return storedPost.getPostId();
-        } catch (EntityNotFoundException e) {
-            String msg = "Requested post not found. Given postID: " + postId;
-            throw new PostNotFoundException(msg);
-        }
-    }
-
 
     // TODO we should delete also all comments of this post
     @Override
@@ -77,62 +55,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDTO getPost(Long postId) {
+    public Post getPost(Long postId) {
         var post = this.postRepository.findById(postId);
         if (post.isPresent()) {
-            return new PostDTO(post.get());
+            return post.get();
         } else {
             String msg = "Requested post not found. Given postID: " + postId;
             throw new PostNotFoundException(msg);
         }
     }
 
+
     @Override
-    public Page<PostDTO> getAllPosts(Pageable pageable) {
+    public Page<Post> getAllPosts(Pageable pageable) {
         Page<Post> posts = this.postRepository.findAll(pageable);
-        Page<PostDTO> result = posts.map(post -> new PostDTO(post));
-        return result;
+        return posts;
     }
 
     @Override
-    public Page<PostDTO> findAllPostsByUser(Long userID, Pageable pageable) {
+    public Page<Post> findAllPostsByUser(Long userID, Pageable pageable) {
         CustomUser author = new CustomUser();
         author.setUserId(userID);
-        return this.postRepository.findAllByAuthor(author, pageable).map(post -> new PostDTO(post));
+        return this.postRepository.findAllByAuthor(author, pageable);
     }
 
-    // @Override
-    // public Page<Post> getAllPosts(
-    //         Optional<Integer> pageLimit,
-    //         Optional<Integer> pageOffset,
-    //         Optional<String> sortBy,
-    //         Optional<String> sortOrder) {
-    //     Integer offset = pageOffset.orElseGet(() -> DEFAULT_PAGE_OFFSET);
-    //     Integer limit = pageLimit.orElseGet(() -> DEFAULT_PAGE_LIMIT);
-    //     String sortColumn = sortBy.orElseGet(() -> "postId");
-    //     String sortDirection = sortOrder.orElseGet(() -> "asc");
-    //     var pageRequest = PageRequest.of(offset, limit,
-    //             Direction.fromString(sortDirection), sortColumn);
-    //     return this.postRepository.findAll(pageRequest);
-    // }
-
-    // @Override
-    // public Page<Post> getAllPosts() {
-    //     return this.getAllPosts(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
-    // }
-
-    // @Override
-    // public void addAllPosts(List<Post> users) {
-    //     this.postRepository.saveAll(users);
-    // }
-
-    // @Override
-    // public void deleteAllPosts(){
-    //     this.postRepository.deleteAll();
-    // }
-
-    // @Override
-    // public void flush(){
-    //     this.postRepository.flush();
-    // }
 }

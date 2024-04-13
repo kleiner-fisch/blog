@@ -82,7 +82,6 @@ public class CustomUser {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.mail = user.getMail();
-        this.posts = user.getPosts();
         this.roles = user.getRoles();
     }
 

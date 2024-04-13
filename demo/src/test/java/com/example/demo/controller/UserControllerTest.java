@@ -52,8 +52,8 @@ public class UserControllerTest {
 
     @BeforeEach
     private void setUp() {
-        user1 = new UserDTO(1L, "user1", "abc", "mail@comp.org", USER_ROLE, Collections.emptyList());
-        user1 = new UserDTO(2L, "user2", "abc", "mail@com.org", USER_ROLE, Collections.emptyList());
+        user1 = new UserDTO(1L, "user1", "abc", "mail@comp.org", USER_ROLE);
+        user1 = new UserDTO(2L, "user2", "abc", "mail@com.org", USER_ROLE);
         users.add(user1);
         users.add(user2);
 

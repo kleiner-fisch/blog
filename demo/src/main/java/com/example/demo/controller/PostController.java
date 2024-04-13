@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,7 +73,7 @@ public interface PostController {
             @ApiResponse(responseCode = "404", description = "The given user does not exist"),
             @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
             @ApiResponse(responseCode = "200", description = "Successfull request") })
-    public CollectionModel<PostDTO> getUserPosts(
+    public PagedModel<PostDTO> getUserPosts(
         @Parameter(description = "the user whose posts we should fetch") 
             @PathVariable("userId") Long userId,
         @AllowSortFields(value = {"postId", "date"})
@@ -99,7 +100,7 @@ public interface PostController {
             @ApiResponse(responseCode = "400", description = "Error in the request parameters"),
             @ApiResponse(responseCode = "200", description = "Successfull request") })
     @GetMapping()
-    public CollectionModel<PostDTO> getAllPosts(
+    public PagedModel<PostDTO> getAllPosts(
         @Parameter(description = "page data of the posts to fetch")
             @AllowSortFields(value = {"postId", "date", "author"})
             @ParameterObject @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable) ;

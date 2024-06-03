@@ -3,12 +3,17 @@ A small web blog to learn about Java backend development.
 
 Supports creating, updating and removing user accounts. Additionally, users can create and remove posts and everybody can comment on posts. The data is stored in a database. 
 
-To show how the blog works with a lot of data we the option to add blog data from a public data store (see below).
+## Hosted Version
+The blog is running and you can try it out: 
+- https://hody-blog.azurewebsites.net/blog/api/v1/swagger-ui/index.html
+- https://hody-blog.azurewebsites.net/blog/api/v1/posts
+
+The blog contains posts from a publicly available data store (see below for more information on this). I will reset the data base every now and then. 
 
 ## Running the Application
 
 ### IDE
-You can import the project contained into a modern IDE and easily start the application from there (tested in VS Code and Intellij).
+You can import the project contained into a modern IDE and easily start the application locally from there (tested in VS Code and Intellij).
 
 1. Import project from `<repository_root>/demo`
 1. Run maven install

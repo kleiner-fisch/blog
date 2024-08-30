@@ -79,6 +79,7 @@ private static final String[] AUTH_WHITELIST = {
           .requestMatchers( HttpMethod.GET, AUTH_WHITELIST).permitAll();
     }).csrf(AbstractHttpConfigurer::disable)
     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    .cors(Customizer.withDefaults())
     .httpBasic(Customizer.withDefaults()).build();
   }
 
